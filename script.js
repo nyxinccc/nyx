@@ -46,3 +46,23 @@ function loginUser() {
   document.getElementById('dashboard').style.display = 'block';
   updateDashboard();
 }
+const planData = {
+  "700": { daily:15 },
+  "1000": { daily:29 },
+  "1500": { daily:59 }
+};
+
+document.querySelectorAll('.plan').forEach((planDiv, index)=>{
+  planDiv.addEventListener('click',()=>{
+    const username = localStorage.getItem('currentUser');
+    if(!username) { alert("Haz login primero"); return; }
+
+    const planKeys = ["700","1000","1500"];
+    let users = JSON.parse(localStorage.getItem('users'));
+    users[username].plan = planKeys[index];
+    users[username].balance = parseInt(planKeys[index]);
+    localStorage.setItem('users', JSON.stringify(users));
+    alert(`Plan ${planKeys[index]} seleccionado!`);
+    updateDashboard();
+  });
+});
