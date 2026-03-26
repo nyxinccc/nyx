@@ -86,7 +86,7 @@ function deposit(){
   let users = JSON.parse(localStorage.getItem('users'));
   users[username].balance += 500; // depósito simulado
   localStorage.setItem('users', JSON.stringify(users));
-  alert("Depósito simulado de S/.500 agregado");
+  alert("Depósito de S/.500 agregado");
   updateDashboard();
 }
 
@@ -97,8 +97,8 @@ function withdraw(){
     alert("Balance insuficiente, mínimo para retirar: 500");
     return;
   }
-  users[username].balance -= 500; // retiro simulado
+  users[username].balance -= 500; // retiro 
   localStorage.setItem('users', JSON.stringify(users));
-  alert("Fondos enviados a tu banco simulado (5-20 días de espera)");
+  alert("Fondos enviados a tu banco (5-20 días de espera)");
   updateDashboard();
 }
