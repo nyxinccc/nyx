@@ -94,3 +94,22 @@
   <script src="script.js"></script>
 </body>
 </html>
+<section id="dashboard" class="container" style="display:none;">
+  <h2>Dashboard</h2>
+  <p>Usuario: <span id="userNameDisplay"></span></p>
+  <p>Plan seleccionado: <span id="userPlanDisplay"></span></p>
+  <p>Balance: S/. <span id="userBalanceDisplay"></span></p>
+
+  <!-- Información de cuenta bancaria -->
+  <h3>Datos bancarios</h3>
+  <input type="text" id="bcpNumber" placeholder="Número de cuenta BCP">
+  <input type="text" id="bcpName" placeholder="Titular de la cuenta">
+  <button onclick="saveBankInfo()">Guardar datos bancarios</button>
+  <p id="bankInfoDisplay"></p>
+
+  <!-- Depósitos y billetera USDT -->
+  <h3>Depósitos</h3>
+  <button onclick="deposit()">Depositar 500 simulados</button>
+  <button onclick="withdraw()">Retirar mínimo 500 simulados</button>
+  <p>Tu billetera USDT simulada: <span id="usdtWallet">0x1234ABCD5678EFGH</span></p>
+</section>
