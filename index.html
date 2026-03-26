@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>NYX Demo Investments</title>
-<link rel="stylesheet" href="styles.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYX Simulador</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header>
+    <h1>NYX Simulador</h1>
+  </header>
 
-<header>
-  <h1>NYX</h1>
-  <p>Invierte sin riesgo y aprende como un profesional</p>
-</header>
-
-<div class="container">
-
-  <!-- Registro -->
-  <div id="register">
-    <h2>Registro de Usuario</h2>
-    <input type="text" id="name" placeholder="Nombre"><br>
-    <input type="email" id="email" placeholder="Email"><br>
-    <button onclick="registerUser()">Registrar</button>
-  </div>
-
-  <!-- Login -->
-  <div id="login">
-    <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email"><br>
-    <button onclick="loginUser()">Ingresar</button>
-  </div>
+  <nav class="menu">
+    <button onclick="showSection('plansSection')">Planes</button>
+    <button onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('news')">Noticias</button>
+    <button onclick="showSection('faq')">FAQs</button>
+  </nav>
 
   <!-- Planes -->
-  <section class="plans" id="plansSection" style="display:none;"></section>
+  <section id="plansSection" class="container">
+    <div class="plans">
+      <div class="plan">
+        <h3>Plan 700</h3>
+        <p>15 soles diarios</p>
+      </div>
+      <div class="plan">
+        <h3>Plan 1000</h3>
+        <p>29 soles diarios</p>
+      </div>
+      <div class="plan">
+        <h3>Plan 1500</h3>
+        <p>59 soles diarios</p>
+      </div>
+    </div>
+  </section>
 
   <!-- Dashboard -->
-  <section id="dashboard" style="display:none;">
-    <h2 id="balance">Balance total: 0 soles</h2>
-    <canvas id="balanceChart" width="400" height="150"></canvas>
-    <h3>Historial</h3>
-    <div id="history"></div>
+  <section id="dashboard" class="container" style="display:none;">
+    <h2>Dashboard</h2>
+    <p>Balance y operaciones simuladas aparecerán aquí</p>
   </section>
-</div>
 
-<footer>
-  <p>Simulación de inversión. No se utiliza dinero real.</p>
-</footer>
+  <!-- Noticias -->
+  <section id="news" style="display:none;">
+    <h2>Noticias NYX</h2>
+    <div class="news-item">📈 Tendencias de inversión 2026: aprende a practicar sin riesgo.</div>
+    <div class="news-item">💡 Nuevas estrategias para incrementar tu balance virtual.</div>
+    <div class="news-item">📰 Recordatorio: Esto es solo un simulador, no dinero real.</div>
+  </section>
 
-<script src="script.js"></script>
+  <!-- FAQs -->
+  <section id="faq" style="display:none;">
+    <h2>Preguntas Frecuentes</h2>
+    <div class="faq-item">
+      <strong>¿Qué es NYX?</strong>
+      <p>NYX es un simulador de inversión para practicar sin arriesgar dinero real.</p>
+    </div>
+    <div class="faq-item">
+      <strong>¿Es dinero real?</strong>
+      <p>No, todo es virtual y para fines de práctica.</p>
+    </div>
+    <div class="faq-item">
+      <strong>¿Cómo funcionan los depósitos?</strong>
+      <p>Puedes ingresar cualquier cantidad virtual a tu plan para simular operaciones.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 NYX Simulador</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
