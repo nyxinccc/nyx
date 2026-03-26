@@ -3,43 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NYX </title>
+  <title>NYX Simulador</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>NYX </h1>
+    <h1>NYX Simulador</h1>
   </header>
 
   <nav class="menu">
+    <button onclick="showSection('auth')">Registro/Login</button>
     <button onclick="showSection('plansSection')">Planes</button>
     <button onclick="showSection('dashboard')">Dashboard</button>
     <button onclick="showSection('news')">Noticias</button>
     <button onclick="showSection('faq')">FAQs</button>
   </nav>
 
-  <!-- Planes -->
-  /* Registro y Login */
-<section id="auth" class="container">
-  <h2>Registro / Login</h2>
-  
-  <!-- Registro -->
-  <div id="registerDiv">
-    <h3>Registro</h3>
-    <input type="text" id="regUsername" placeholder="Usuario">
-    <input type="password" id="regPassword" placeholder="Contraseña">
-    <button onclick="registerUser()">Registrarse</button>
-  </div>
+  <!-- Registro/Login -->
+  <section id="auth" class="container">
+    <h2>Registro / Login</h2>
+    
+    <!-- Registro -->
+    <div id="registerDiv">
+      <h3>Registro</h3>
+      <input type="text" id="regUsername" placeholder="Usuario">
+      <input type="password" id="regPassword" placeholder="Contraseña">
+      <button onclick="registerUser()">Registrarse</button>
+    </div>
 
-  <!-- Login -->
-  <div id="loginDiv" style="margin-top:20px;">
-    <h3>Login</h3>
-    <input type="text" id="loginUsername" placeholder="Usuario">
-    <input type="password" id="loginPassword" placeholder="Contraseña">
-    <button onclick="loginUser()">Ingresar</button>
-  </div>
-</section>
-  <section id="plansSection" class="container">
+    <!-- Login -->
+    <div id="loginDiv" style="margin-top:20px;">
+      <h3>Login</h3>
+      <input type="text" id="loginUsername" placeholder="Usuario">
+      <input type="password" id="loginPassword" placeholder="Contraseña">
+      <button onclick="loginUser()">Ingresar</button>
+    </div>
+  </section>
+
+  <!-- Planes -->
+  <section id="plansSection" class="container" style="display:none;">
     <div class="plans">
       <div class="plan">
         <h3>Plan 700</h3>
@@ -59,15 +61,41 @@
   <!-- Dashboard -->
   <section id="dashboard" class="container" style="display:none;">
     <h2>Dashboard</h2>
-    <p>Balance y operaciones aparecerán aquí</p>
+    <p>Usuario: <span id="userNameDisplay"></span></p>
+    <p>Plan seleccionado: <span id="userPlanDisplay"></span></p>
+    <p>Balance: S/. <span id="userBalanceDisplay"></span></p>
+
+    <!-- Información de cuenta bancaria -->
+    <h3>Datos bancarios</h3>
+    <input type="text" id="bcpNumber" placeholder="Número de cuenta BCP">
+    <input type="text" id="bcpName" placeholder="Titular de la cuenta">
+    <button onclick="saveBankInfo()">Guardar datos bancarios</button>
+    <p id="bankInfoDisplay"></p>
+
+    <!-- Depósitos y billetera USDT -->
+    <h3>Depósitos</h3>
+    <p>Billetera USDT para depositar: <span id="usdtWallet">TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</span></p>
+    <button onclick="deposit()">Depositar 500 simulados</button>
+
+    <!-- Retiros -->
+    <h3>Retirar dinero</h3>
+    <select id="withdrawBank">
+      <option value="">Selecciona tu banco</option>
+      <option value="BCP">BCP</option>
+      <option value="BBVA">BBVA</option>
+      <option value="INTERBANK">INTERBANK</option>
+      <option value="SCOTIABANK">SCOTIABANK</option>
+      <option value="BANBIF">BANBIF</option>
+    </select>
+    <button onclick="withdraw()">Retirar mínimo 500 soles</button>
   </section>
 
   <!-- Noticias -->
   <section id="news" style="display:none;">
     <h2>Noticias NYX</h2>
-    <div class="news-item">📈 Tendencias de inversión 2026: aprende sin riesgo.</div>
-    <div class="news-item">💡 Nuevas estrategias para incrementar tu balance </div>
-    <div class="news-item">📰 Recordatorio: Esto es dinero real.</div>
+    <div class="news-item">📈 Tendencias de inversión 2026: aprende a practicar sin riesgo.</div>
+    <div class="news-item">💡 Nuevas estrategias para incrementar tu balance virtual.</div>
+    <div class="news-item">📰 Recordatorio: Esto es solo un simulador, no dinero real.</div>
   </section>
 
   <!-- FAQs -->
@@ -75,41 +103,22 @@
     <h2>Preguntas Frecuentes</h2>
     <div class="faq-item">
       <strong>¿Qué es NYX?</strong>
-      <p>NYX es una de inversión.</p>
+      <p>NYX es un simulador de inversión para practicar sin arriesgar dinero real.</p>
     </div>
     <div class="faq-item">
       <strong>¿Es dinero real?</strong>
-      <p>Sí, todo es dinero real y para fines de práctica.</p>
+      <p>No, todo es virtual y para fines de práctica.</p>
     </div>
     <div class="faq-item">
       <strong>¿Cómo funcionan los depósitos?</strong>
-      <p>Puedes ingresar cualquier cantidad a tu plan para operaciones.</p>
+      <p>Puedes ingresar cualquier cantidad virtual a tu plan para simular operaciones.</p>
     </div>
   </section>
 
   <footer>
-    <p>&copy; 2026 NYX </p>
+    <p>&copy; 2026 NYX Simulador</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-<section id="dashboard" class="container" style="display:none;">
-  <h2>Dashboard</h2>
-  <p>Usuario: <span id="userNameDisplay"></span></p>
-  <p>Plan seleccionado: <span id="userPlanDisplay"></span></p>
-  <p>Balance: S/. <span id="userBalanceDisplay"></span></p>
-
-  <!-- Información de cuenta bancaria -->
-  <h3>Datos bancarios</h3>
-  <input type="text" id="bcpNumber" placeholder="Número de cuenta BCP">
-  <input type="text" id="bcpName" placeholder="Titular de la cuenta">
-  <button onclick="saveBankInfo()">Guardar datos bancarios</button>
-  <p id="bankInfoDisplay"></p>
-
-  <!-- Depósitos y billetera USDT -->
-  <h3>Depósitos</h3>
-  <button onclick="deposit()">Depositar 500 simulados</button>
-  <button onclick="withdraw()">Retirar mínimo 500 simulados</button>
-  <p>Tu billetera USDT simulada: <span id="usdtWallet">0x1234ABCD5678EFGH</span></p>
-</section>
