@@ -102,3 +102,28 @@ function withdraw(){
   alert("Fondos enviados a tu banco (5-20 días de espera)");
   updateDashboard();
 }
+function saveBankInfo(){
+  const username = localStorage.getItem('currentUser');
+  if(!username) return;
+
+  let users = JSON.parse(localStorage.getItem('users'));
+  const bcpNumber = document.getElementById('bcpNumber').value;
+  const bcpName = document.getElementById('bcpName').value;
+
+  if(!bcpNumber || !bcpName){
+    alert("Completa ambos campos de tu cuenta BCP");
+    return;
+  }
+
+  users[username].bank = {
+    number: bcpNumber,
+    name: bcpName
+  };
+
+  localStorage.setItem('users', JSON.stringify(users));
+  alert("Datos bancarios guardados");
+
+  // Mostrar en pantalla
+  document.getElementById('bankInfoDisplay').innerText =
+    `Cuenta BCP: ${bcpNumber} | Titular: ${bcpName}`;
+}
