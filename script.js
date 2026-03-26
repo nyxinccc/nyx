@@ -1,4 +1,3 @@
-// Mostrar secciones
 function showSection(id){
   const sections = ['auth','plansSection','dashboard','news','faq'];
   sections.forEach(sec => {
@@ -6,7 +5,7 @@ function showSection(id){
   });
 }
 
-// Usuarios simulados
+// Registro/Login
 function registerUser() {
   const username = document.getElementById('regUsername').value;
   const password = document.getElementById('regPassword').value;
@@ -50,7 +49,7 @@ function saveBankInfo(){
   users[username].bank = { number:bcpNumber, name:bcpName };
   localStorage.setItem('users', JSON.stringify(users));
   alert("Datos bancarios guardados");
-  document.getElementById('bankInfoDisplay').innerText = `Cuenta BCP: ${bcpNumber} | Titular: ${bcpName}`;
+  updateDashboard();
 }
 
 // Planes
@@ -69,7 +68,7 @@ document.querySelectorAll('.plan').forEach((planDiv,index)=>{
   });
 });
 
-// Actualizar dashboard
+// Dashboard
 function updateDashboard(){
   const username = localStorage.getItem('currentUser');
   if(!username) return;
@@ -84,6 +83,16 @@ function updateDashboard(){
     document.getElementById('bankInfoDisplay').innerText =
       `Cuenta BCP: ${user.bank.number} | Titular: ${user.bank.name}`;
   } else { document.getElementById('bankInfoDisplay').innerText = ""; }
+
+  // Mostrar wallet USDT
+  const wallet = "TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
+  document.getElementById('usdtWallet').innerText = wallet;
+}
+
+// Copiar wallet al portapapeles
+function copyWallet(){
+  const wallet = document.getElementById('usdtWallet').innerText;
+  navigator.clipboard.writeText(wallet).then(()=>alert("Wallet copiada al portapapeles!"));
 }
 
 // Depósito simulado
