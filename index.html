@@ -19,6 +19,26 @@
   </nav>
 
   <!-- Planes -->
+  /* Registro y Login */
+<section id="auth" class="container">
+  <h2>Registro / Login</h2>
+  
+  <!-- Registro -->
+  <div id="registerDiv">
+    <h3>Registro</h3>
+    <input type="text" id="regUsername" placeholder="Usuario">
+    <input type="password" id="regPassword" placeholder="Contraseña">
+    <button onclick="registerUser()">Registrarse</button>
+  </div>
+
+  <!-- Login -->
+  <div id="loginDiv" style="margin-top:20px;">
+    <h3>Login</h3>
+    <input type="text" id="loginUsername" placeholder="Usuario">
+    <input type="password" id="loginPassword" placeholder="Contraseña">
+    <button onclick="loginUser()">Ingresar</button>
+  </div>
+</section>
   <section id="plansSection" class="container">
     <div class="plans">
       <div class="plan">
