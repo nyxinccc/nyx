@@ -1,29 +1,23 @@
-// Función para mostrar secciones al hacer clic en el menú
+// Mostrar secciones
 function showSection(id){
-  const sections = ['plansSection','dashboard','news','faq'];
+  const sections = ['auth','plansSection','dashboard','news','faq'];
   sections.forEach(sec => {
     document.getElementById(sec).style.display = (sec===id) ? 'block' : 'none';
   });
 }
-// Usuarios guardados en localStorage (simulado)
+
+// Usuarios simulados
 function registerUser() {
   const username = document.getElementById('regUsername').value;
   const password = document.getElementById('regPassword').value;
-
-  if(!username || !password){
-    alert("Completa todos los campos");
-    return;
-  }
+  if(!username || !password){ alert("Completa todos los campos"); return; }
 
   let users = JSON.parse(localStorage.getItem('users')) || {};
-  if(users[username]){
-    alert("Usuario ya existe");
-    return;
-  }
+  if(users[username]){ alert("Usuario ya existe"); return; }
 
-  users[username] = { password: password, balance: 0, plan: null };
+  users[username] = { password, balance:0, plan:null, bank:null };
   localStorage.setItem('users', JSON.stringify(users));
-  alert("Registro exitoso! Ahora haz login.");
+  alert("Registro exitoso! Haz login.");
   document.getElementById('regUsername').value = '';
   document.getElementById('regPassword').value = '';
 }
@@ -31,32 +25,40 @@ function registerUser() {
 function loginUser() {
   const username = document.getElementById('loginUsername').value;
   const password = document.getElementById('loginPassword').value;
-
   let users = JSON.parse(localStorage.getItem('users')) || {};
+
   if(!users[username] || users[username].password !== password){
-    alert("Usuario o contraseña incorrectos");
-    return;
+    alert("Usuario o contraseña incorrectos"); return;
   }
 
-  alert("Login exitoso!");
-  // Guardamos usuario actual
   localStorage.setItem('currentUser', username);
-  document.getElementById('auth').style.display = 'none';
-  document.getElementById('plansSection').style.display = 'block';
-  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('auth').style.display='none';
+  document.getElementById('plansSection').style.display='block';
+  document.getElementById('dashboard').style.display='block';
   updateDashboard();
 }
-const planData = {
-  "700": { daily:15 },
-  "1000": { daily:29 },
-  "1500": { daily:59 }
-};
 
-document.querySelectorAll('.plan').forEach((planDiv, index)=>{
+// Guardar datos bancarios
+function saveBankInfo(){
+  const username = localStorage.getItem('currentUser');
+  if(!username) return;
+  let users = JSON.parse(localStorage.getItem('users'));
+  const bcpNumber = document.getElementById('bcpNumber').value;
+  const bcpName = document.getElementById('bcpName').value;
+  if(!bcpNumber || !bcpName){ alert("Completa ambos campos"); return; }
+
+  users[username].bank = { number:bcpNumber, name:bcpName };
+  localStorage.setItem('users', JSON.stringify(users));
+  alert("Datos bancarios guardados");
+  document.getElementById('bankInfoDisplay').innerText = `Cuenta BCP: ${bcpNumber} | Titular: ${bcpName}`;
+}
+
+// Planes
+const planData = { "700":{daily:15}, "1000":{daily:29}, "1500":{daily:59} };
+document.querySelectorAll('.plan').forEach((planDiv,index)=>{
   planDiv.addEventListener('click',()=>{
     const username = localStorage.getItem('currentUser');
-    if(!username) { alert("Haz login primero"); return; }
-
+    if(!username){ alert("Haz login primero"); return; }
     const planKeys = ["700","1000","1500"];
     let users = JSON.parse(localStorage.getItem('users'));
     users[username].plan = planKeys[index];
@@ -66,64 +68,44 @@ document.querySelectorAll('.plan').forEach((planDiv, index)=>{
     updateDashboard();
   });
 });
+
+// Actualizar dashboard
 function updateDashboard(){
   const username = localStorage.getItem('currentUser');
   if(!username) return;
   let users = JSON.parse(localStorage.getItem('users'));
   const user = users[username];
-  
-  document.getElementById('dashboard').innerHTML = `
-    <h2>Dashboard</h2>
-    <p>Usuario: ${username}</p>
-    <p>Plan seleccionado: ${user.plan || "Ninguno"}</p>
-    <p>Balance: S/. ${user.balance}</p>
-    <button onclick="deposit()">Depositar 500 simulados</button>
-    <button onclick="withdraw()">Retirar mínimo 500 simulados</button>
-  `;
+
+  document.getElementById('userNameDisplay').innerText = username;
+  document.getElementById('userPlanDisplay').innerText = user.plan || "Ninguno";
+  document.getElementById('userBalanceDisplay').innerText = user.balance;
+
+  if(user.bank){
+    document.getElementById('bankInfoDisplay').innerText =
+      `Cuenta BCP: ${user.bank.number} | Titular: ${user.bank.name}`;
+  } else { document.getElementById('bankInfoDisplay').innerText = ""; }
 }
+
+// Depósito simulado
 function deposit(){
   const username = localStorage.getItem('currentUser');
   let users = JSON.parse(localStorage.getItem('users'));
-  users[username].balance += 500; // depósito simulado
+  users[username].balance += 500; 
   localStorage.setItem('users', JSON.stringify(users));
-  alert("Depósito de S/.500 agregado");
+  alert(`Depósito simulado de S/.500 agregado a tu balance.\nWallet USDT: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5`);
   updateDashboard();
 }
 
+// Retiro simulado
 function withdraw(){
   const username = localStorage.getItem('currentUser');
   let users = JSON.parse(localStorage.getItem('users'));
-  if(users[username].balance < 500){
-    alert("Balance insuficiente, mínimo para retirar: 500");
-    return;
-  }
-  users[username].balance -= 500; // retiro 
+  const bank = document.getElementById('withdrawBank').value;
+  if(!bank){ alert("Selecciona un banco"); return; }
+  if(users[username].balance < 500){ alert("Balance insuficiente, mínimo retiro 500 soles"); return; }
+
+  users[username].balance -= 500;
   localStorage.setItem('users', JSON.stringify(users));
-  alert("Fondos enviados a tu banco (5-20 días de espera)");
+  alert(`Retiro simulado a tu banco ${bank} confirmado.\nFondos enviados en 5-10 días.`);
   updateDashboard();
-}
-function saveBankInfo(){
-  const username = localStorage.getItem('currentUser');
-  if(!username) return;
-
-  let users = JSON.parse(localStorage.getItem('users'));
-  const bcpNumber = document.getElementById('bcpNumber').value;
-  const bcpName = document.getElementById('bcpName').value;
-
-  if(!bcpNumber || !bcpName){
-    alert("Completa ambos campos de tu cuenta BCP");
-    return;
-  }
-
-  users[username].bank = {
-    number: bcpNumber,
-    name: bcpName
-  };
-
-  localStorage.setItem('users', JSON.stringify(users));
-  alert("Datos bancarios guardados");
-
-  // Mostrar en pantalla
-  document.getElementById('bankInfoDisplay').innerText =
-    `Cuenta BCP: ${bcpNumber} | Titular: ${bcpName}`;
 }
