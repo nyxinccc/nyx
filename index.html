@@ -22,8 +22,6 @@
   <!-- Registro/Login -->
   <section id="auth" class="container">
     <h2>Registro / Login</h2>
-    
-    <!-- Registro -->
     <div id="registerDiv">
       <h3>Registro</h3>
       <input type="text" id="regUsername" placeholder="Usuario">
@@ -31,7 +29,6 @@
       <button onclick="registerUser()">Registrarse</button>
     </div>
 
-    <!-- Login -->
     <div id="loginDiv" style="margin-top:20px;">
       <h3>Login</h3>
       <input type="text" id="loginUsername" placeholder="Usuario">
@@ -72,9 +69,9 @@
     <button onclick="saveBankInfo()">Guardar datos bancarios</button>
     <p id="bankInfoDisplay"></p>
 
-    <!-- Depósitos y billetera USDT -->
+    <!-- Depósitos -->
     <h3>Depósitos</h3>
-    <p>Billetera USDT para depositar: <span id="usdtWallet">TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</span></p>
+    <p>Billetera USDT para depositar: <span id="usdtWallet"></span> <button onclick="copyWallet()">Copiar</button></p>
     <button onclick="deposit()">Depositar 500 simulados</button>
 
     <!-- Retiros -->
