@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>NYX Demo Investments</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>NYX</h1>
+  <p>Invierte sin riesgo y aprende como un profesional</p>
+</header>
+
+<div class="container">
+
+  <!-- Registro -->
+  <div id="register">
+    <h2>Registro de Usuario</h2>
+    <input type="text" id="name" placeholder="Nombre"><br>
+    <input type="email" id="email" placeholder="Email"><br>
+    <button onclick="registerUser()">Registrar</button>
+  </div>
+
+  <!-- Login -->
+  <div id="login">
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email"><br>
+    <button onclick="loginUser()">Ingresar</button>
+  </div>
+
+  <!-- Planes -->
+  <section class="plans" id="plansSection" style="display:none;"></section>
+
+  <!-- Dashboard -->
+  <section id="dashboard" style="display:none;">
+    <h2 id="balance">Balance total: 0 soles</h2>
+    <canvas id="balanceChart" width="400" height="150"></canvas>
+    <h3>Historial</h3>
+    <div id="history"></div>
+  </section>
+</div>
+
+<footer>
+  <p>Simulación de inversión. No se utiliza dinero real.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
