@@ -66,3 +66,18 @@ document.querySelectorAll('.plan').forEach((planDiv, index)=>{
     updateDashboard();
   });
 });
+function updateDashboard(){
+  const username = localStorage.getItem('currentUser');
+  if(!username) return;
+  let users = JSON.parse(localStorage.getItem('users'));
+  const user = users[username];
+  
+  document.getElementById('dashboard').innerHTML = `
+    <h2>Dashboard</h2>
+    <p>Usuario: ${username}</p>
+    <p>Plan seleccionado: ${user.plan || "Ninguno"}</p>
+    <p>Balance: S/. ${user.balance}</p>
+    <button onclick="deposit()">Depositar 500 simulados</button>
+    <button onclick="withdraw()">Retirar mínimo 500 simulados</button>
+  `;
+}
