@@ -81,3 +81,24 @@ function updateDashboard(){
     <button onclick="withdraw()">Retirar mínimo 500 simulados</button>
   `;
 }
+function deposit(){
+  const username = localStorage.getItem('currentUser');
+  let users = JSON.parse(localStorage.getItem('users'));
+  users[username].balance += 500; // depósito simulado
+  localStorage.setItem('users', JSON.stringify(users));
+  alert("Depósito simulado de S/.500 agregado");
+  updateDashboard();
+}
+
+function withdraw(){
+  const username = localStorage.getItem('currentUser');
+  let users = JSON.parse(localStorage.getItem('users'));
+  if(users[username].balance < 500){
+    alert("Balance insuficiente, mínimo para retirar: 500");
+    return;
+  }
+  users[username].balance -= 500; // retiro simulado
+  localStorage.setItem('users', JSON.stringify(users));
+  alert("Fondos enviados a tu banco simulado (5-20 días de espera)");
+  updateDashboard();
+}
