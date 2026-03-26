@@ -27,3 +27,6 @@ header h1 { color:#00ffcc; margin:0; }
 
 /* Footer */
 footer { text-align:center; padding:20px 0; background:#111; border-top:1px solid #00ffcc33; }
+/* Inputs y botones ya tienen estilo global, solo agregamos margen */
+#auth input { display:block; margin:10px auto; }
+#auth button { display:block; margin:10px auto; }
