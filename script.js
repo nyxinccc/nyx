@@ -118,3 +118,8 @@ function withdraw(){
   alert(`Retiro simulado a tu banco ${bank} confirmado.\nFondos enviados en 5-10 días.`);
   updateDashboard();
 }
+users[username].plan = planKeys[index];
+users[username].balance = parseInt(planKeys[index]);
+
+// NUEVO: guardar última fecha
+users[username].lastClaim = Date.now();
