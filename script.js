@@ -72,8 +72,15 @@ document.querySelectorAll('.plan').forEach((planDiv,index)=>{
 function updateDashboard(){
   const username = localStorage.getItem('currentUser');
   if(!username) return;
+
   let users = JSON.parse(localStorage.getItem('users'));
   const user = users[username];
+
+  // 🔥 APLICAR GANANCIAS AUTOMÁTICAS
+  applyDailyEarnings(user);
+
+  // Guardar cambios
+  localStorage.setItem('users', JSON.stringify(users));
 
   document.getElementById('userNameDisplay').innerText = username;
   document.getElementById('userPlanDisplay').innerText = user.plan || "Ninguno";
@@ -82,11 +89,11 @@ function updateDashboard(){
   if(user.bank){
     document.getElementById('bankInfoDisplay').innerText =
       `Cuenta BCP: ${user.bank.number} | Titular: ${user.bank.name}`;
-  } else { document.getElementById('bankInfoDisplay').innerText = ""; }
+  } else {
+    document.getElementById('bankInfoDisplay').innerText = "";
+  }
 
-  // Mostrar wallet USDT
-  const wallet = "TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
-  document.getElementById('usdtWallet').innerText = wallet;
+  document.getElementById('usdtWallet').innerText = "TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
 }
 
 // Copiar wallet al portapapeles
