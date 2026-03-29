@@ -123,3 +123,24 @@ users[username].balance = parseInt(planKeys[index]);
 
 // NUEVO: guardar última fecha
 users[username].lastClaim = Date.now();
+function applyDailyEarnings(user){
+  if(!user.plan) return;
+
+  const dailyRates = {
+    "700": 15,
+    "1000": 29,
+    "1500": 59
+  };
+
+  const now = Date.now();
+  const last = user.lastClaim || now;
+
+  const diffTime = now - last;
+  const daysPassed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  if(daysPassed > 0){
+    const earnings = dailyRates[user.plan] * daysPassed;
+    user.balance += earnings;
+    user.lastClaim = now;
+  }
+}
