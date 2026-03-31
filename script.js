@@ -53,12 +53,12 @@ function saveBankInfo(){
 }
 
 // Planes
-const planData = { "730":{daily:15}, "1000":{daily:29}, "1500":{daily:59} };
+const planData = { "745":{daily:15}, "1000":{daily:29}, "1500":{daily:59} };
 document.querySelectorAll('.plan').forEach((planDiv,index)=>{
   planDiv.addEventListener('click',()=>{
     const username = localStorage.getItem('currentUser');
     if(!username){ alert("Haz login primero"); return; }
-    const planKeys = ["730","1000","1500"];
+    const planKeys = ["745","1000","1500"];
     let users = JSON.parse(localStorage.getItem('users'));
     users[username].plan = planKeys[index];
     users[username].balance = parseInt(planKeys[index]);
@@ -134,7 +134,7 @@ function applyDailyEarnings(user){
   if(!user.plan) return;
 
   const dailyRates = {
-    "730": 15,
+    "745": 15,
     "1000": 29,
     "1500": 59
   };
