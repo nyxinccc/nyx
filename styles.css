@@ -34,3 +34,56 @@ footer { text-align:center; padding:20px 0; background:#111; border-top:1px soli
 .promo-box button:hover {
   background: orange;
 }
+/* POPUP PROMO */
+.promo-popup {
+  position: fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.8);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.promo-content {
+  background:#111;
+  padding:30px;
+  border-radius:15px;
+  text-align:center;
+  border:2px solid gold;
+  box-shadow:0 0 25px gold;
+  animation: zoomIn 0.5s ease;
+}
+
+.promo-content h2 { color: gold; }
+.promo-content h3 { color: #00ffcc; }
+
+.promo-content button {
+  background: gold;
+  color:black;
+  font-weight:bold;
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.promo-content button:hover {
+  background: orange;
+}
+
+.close-btn {
+  position:absolute;
+  top:15px;
+  right:20px;
+  cursor:pointer;
+  font-size:20px;
+  color:white;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.5); opacity:0; }
+  to { transform: scale(1); opacity:1; }
+}
