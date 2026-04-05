@@ -1,194 +1,63 @@
-<h2>🇵🇪 PROMOCIÓN POR ANIVERSARIO</h2>
-
-    <p>🎉 Campaña exclusiva para usuarios activos</p>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NYX </title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NYX</title>
+<link rel="stylesheet" href="styles.css">
 </head>
-  <!-- POPUP PROMOCIÓN -->
-<div id="promoPopup" class="promo-popup">
-  <div class="promo-content">
-    <span class="close-btn" onclick="closePromo()">✖</span>
-
-    <h2>🇵🇪 PROMOCIÓN POR ANIVERSARIO</h2>
-
-    <div id="promoPopup" class="promo-popup">
-  <div class="promo-content">
-    <span class="close-btn" onclick="closePromo()">✖</span>
-    <h3>📱 iPhone 17 Pro Max</h3>
-
-    <p><strong>Solo por S/. 339.99</strong> (REAL)</p>
-
-    <p id="stockText">🔥 Quedan 7 unidades disponibles</p>
-
-    <p>⏳ Oferta termina en: <span id="countdown">05:00</span></p>
-
-    <button onclick="claimPromo()">RECLAMAR AHORA</button>
-
-    <p id="promoStatus"></p>
-  </div>
-</div>
-
-<!-- SONIDO -->
-<audio id="promoSound">
-  <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg">
-</audio>
-
-<!-- NOTIFICACIONES -->
-<div id="liveNotif" class="live-notif"></div>
-
-    <p><strong>Solo por S/. 500</strong> (Real)</p>
-
-    <p>⚠️ Oferta limitada<br>
-    ⚠️ Solo 1 por usuario<br>
-    ⚠️ Entrega en 5-10 días</p>
-
-    <button onclick="claimPromo()">RECLAMAR AHORA</button>
-
-    <p id="promoStatus"></p>
-  </div>
-</div>
 <body>
-  <header>
-    <h1>NYX </h1>
-  </header>
 
-  <nav class="menu">
-    <button onclick="showSection('auth')">Registro/Login</button>
-    <button onclick="showSection('plansSection')">Planes</button>
-    <button onclick="showSection('dashboard')">Dashboard</button>
-    <button onclick="showSection('news')">Noticias</button>
-    <button onclick="showSection('faq')">FAQs</button>
-  </nav>
-<button onclick="showSection('promo')">Promoción</button>
-  <!-- Registro/Login -->
-  <section id="auth" class="container">
-    <h2>Registro / Login</h2>
-    <div id="registerDiv">
-      <h3>Registro</h3>
-      <input type="text" id="regUsername" placeholder="Usuario">
-      <input type="password" id="regPassword" placeholder="Contraseña">
-      <button onclick="registerUser()">Registrarse</button>
-    </div>
+<header>
+  <h1>NYX</h1>
+</header>
 
-    <div id="loginDiv" style="margin-top:20px;">
-      <h3>Login</h3>
-      <input type="text" id="loginUsername" placeholder="Usuario">
-      <input type="password" id="loginPassword" placeholder="Contraseña">
-      <button onclick="loginUser()">Ingresar</button>
-    </div>
-  </section>
+<nav class="menu">
+  <button onclick="showSection('auth')">Login</button>
+  <button onclick="showSection('dashboard')">Dashboard</button>
+</nav>
 
-  <!-- Planes -->
-  <section id="plansSection" class="container" style="display:none;">
-    <div class="plans">
-      <div class="plan">
-        <h3>Plan 700</h3>
-        <p>15 soles diarios</p>
-      </div>
-      <div class="plan">
-        <h3>Plan 1000</h3>
-        <p>29 soles diarios</p>
-      </div>
-      <div class="plan">
-        <h3>Plan 1500</h3>
-        <p>59 soles diarios</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Dashboard -->
-  <section id="dashboard" class="container" style="display:none;">
-    <h2>Dashboard</h2>
-    <p>Usuario: <span id="userNameDisplay"></span></p>
-    <p>Plan seleccionado: <span id="userPlanDisplay"></span></p>
-    <p>Balance: S/815 <span id="userBalanceDisplay"></span></p>
-<section id="promo" class="container" style="display:none;">
-  <h2>🎉 Promoción Especial - Fiestas Patrias</h2>
-
-  <div class="promo-box">
-    <h3>🇵🇪 Campaña Exclusiva NYX</h3>
-    <p>
-      Por motivo de Fiestas Patrias, NYX lanza una campaña especial para nuestros usuarios activos.
-    </p>
-
-    <p>
-      🎁 Reclama un <strong>iPhone 17 Pro Max</strong> por solo <strong>S/. 500</strong> (simulado)
-    </p>
-
-    <p>
-      Esta promoción es limitada y válida solo para usuarios registrados dentro de la plataforma.
-    </p>
-
-    <p>
-      ⚠️ Máximo 1 equipo por usuario<br>
-      ⚠️ Sujeto a verificación interna del sistema NYX<br>
-      ⚠️ Entrega simulada dentro de 5 a 10 días hábiles
-    </p>
-
-    <button onclick="claimPromo()">Reclamar Promoción</button>
-
-    <p id="promoStatus"></p>
-  </div>
+<section id="auth">
+  <h2>Login</h2>
+  <input id="user" placeholder="Usuario">
+  <input id="pass" type="password" placeholder="Contraseña">
+  <button onclick="login()">Entrar</button>
 </section>
-    <!-- Información de cuenta bancaria -->
-    <h3>Datos bancarios</h3>
-    <input type="text" id="bcpNumber" placeholder="Número de cuenta BCP">
-    <input type="text" id="bcpName" placeholder="Titular de la cuenta">
-    <button onclick="saveBankInfo()">Guardar datos bancarios</button>
-    <p id="bankInfoDisplay"></p>
 
-    <!-- Depósitos -->
-    <h3>Depósitos</h3>
-    <p>Billetera USDT para depositar: <span id="usdtWallet"></span> <button onclick="copyWallet()">Copiar</button></p>
-    <button onclick="deposit()">Depositar 500 </button>
+<section id="dashboard" style="display:none;">
+  <h2>Bienvenido</h2>
+  <p>Balance: S/830 <span id="balance">830</span></p>
 
-    <!-- Retiros -->
-    <h3>Retirar dinero</h3>
-    <select id="withdrawBank">
-      <option value="">Selecciona tu banco</option>
-      <option value="BCP">BCP</option>
-      <option value="BBVA">BBVA</option>
-      <option value="INTERBANK">INTERBANK</option>
-      <option value="SCOTIABANK">SCOTIABANK</option>
-      <option value="BANBIF">BANBIF</option>
-    </select>
-    <button onclick="withdraw()">Retirar mínimo 500 soles</button>
-  </section>
+  <h3>Depositar</h3>
+  <p>Wallet: <span id="wallet"></span></p>
+  <button onclick="copyWallet()">Copiar Wallet</button>
+  <button onclick="deposit()">Depositar 500</button>
 
-  <!-- Noticias -->
-  <section id="news" style="display:none;">
-    <h2>Noticias NYX</h2>
-    <div class="news-item">📈 Tendencias de inversión 2026: aprende a practicar sin riesgo.</div>
-    <div class="news-item">💡 Nuevas estrategias para incrementar tu balance </div>
-    <div class="news-item">📰 Recordatorio: Esto es dinero real .</div>
-  </section>
+  <h3>Retirar</h3>
+  <select id="bank">
+    <option value="BCP">BCP</option>
+    <option value="BBVA">BBVA</option>
+    <option value="Interbank">Interbank</option>
+    <option value="Scotiabank">Scotiabank</option>
+  </select>
+  <button onclick="withdraw()">Retirar 500</button>
+</section>
 
-  <!-- FAQs -->
-  <section id="faq" style="display:none;">
-    <h2>Preguntas Frecuentes</h2>
-    <div class="faq-item">
-      <strong>¿Qué es NYX?</strong>
-      <p>NYX es una inversión l.</p>
-    </div>
-    <div class="faq-item">
-      <strong>¿Es dinero real?</strong>
-      <p>Sí, todo es dinero real.</p>
-    </div>
-    <div class="faq-item">
-      <strong>¿Cómo funcionan los depósitos?</strong>
-      <p>Puedes ingresar cualquier cantidad a tu plan para operaciones.</p>
-    </div>
-  </section>
+<!-- POPUP PROMO -->
+<div id="promoPopup" class="popup">
+  <div class="popup-box">
+    <h2>🔥 PROMOCIÓN ESPECIAL</h2>
+    <p>iPhone 17 Pro Max</p>
+    <p><strong>S/. 339.99</strong></p>
 
-  <footer>
-    <p>&copy; 2026 NYX </p>
-  </footer>
+    <p id="stock">Quedan 5 unidades</p>
+    <p>⏳ Tiempo: <span id="countdown">05:00</span></p>
 
-  <script src="script.js"></script>
+    <button onclick="claim()">RECLAMAR</button>
+    <button onclick="closePopup()">Cerrar</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
