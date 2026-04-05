@@ -151,3 +151,30 @@ function applyDailyEarnings(user){
     user.lastClaim = now;
   }
 }
+function claimPromo(){
+  const username = localStorage.getItem('currentUser');
+  if(!username){ alert("Debes iniciar sesión"); return; }
+
+  let users = JSON.parse(localStorage.getItem('users'));
+  const user = users[username];
+
+  if(user.promoClaimed){
+    document.getElementById('promoStatus').innerText = "⚠️ Ya reclamaste esta promoción.";
+    return;
+  }
+
+  if(user.balance < 500){
+    alert("Necesitas al menos S/.500 para acceder a esta promoción");
+    return;
+  }
+
+  user.balance -= 500;
+  user.promoClaimed = true;
+
+  localStorage.setItem('users', JSON.stringify(users));
+
+  document.getElementById('promoStatus').innerText =
+    "🎉 Solicitud enviada! Tu iPhone será procesado (simulado). Tiempo estimado: 5-10 días.";
+
+  updateDashboard();
+}
