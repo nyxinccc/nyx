@@ -230,3 +230,82 @@ function claimPromo(){
 
   updateDashboard();
 }
+// 🔊 POPUP AUTOMÁTICO + SONIDO
+window.onload = function(){
+  const username = localStorage.getItem('currentUser');
+
+  if(username){
+    let users = JSON.parse(localStorage.getItem('users'));
+    const user = users[username];
+
+    if(!user.promoShown){
+      setTimeout(()=>{
+        document.getElementById('promoPopup').style.display = 'flex';
+
+        // sonido
+        document.getElementById('promoSound').play();
+
+        startCountdown();
+        randomStock();
+
+      }, 1500);
+
+      user.promoShown = true;
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    startFakeNotifications();
+  }
+};
+
+// ⏳ CONTADOR
+function startCountdown(){
+  let time = 300; // 5 minutos
+
+  const interval = setInterval(()=>{
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+
+    document.getElementById('countdown').innerText =
+      `${minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+
+    time--;
+
+    if(time < 0){
+      clearInterval(interval);
+      document.getElementById('countdown').innerText = "FINALIZADO";
+    }
+  },1000);
+}
+
+// 📉 STOCK DINÁMICO
+function randomStock(){
+  let stock = Math.floor(Math.random() * 5) + 3; // entre 3 y 7
+
+  setInterval(()=>{
+    if(stock > 1){
+      stock--;
+      document.getElementById('stockText').innerText =
+        `🔥 Quedan ${stock} unidades disponibles`;
+    }
+  }, 8000);
+}
+
+// 🔔 NOTIFICACIONES FALSAS
+function startFakeNotifications(){
+  const names = ["Carlos", "Luis", "María", "Ana", "José", "Pedro"];
+
+  setInterval(()=>{
+    const name = names[Math.floor(Math.random()*names.length)];
+    const amount = [15,29,59][Math.floor(Math.random()*3)];
+
+    const notif = document.getElementById('liveNotif');
+    notif.innerText = `💰 ${name} ganó S/.${amount} hoy`;
+    notif.style.display = 'block';
+
+    setTimeout(()=>{
+      notif.style.display = 'none';
+    },4000);
+
+  },7000);
+}
