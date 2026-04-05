@@ -1,26 +1,57 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>NYX</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NYX</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h1>NYX</h1>
+<header>
+  <h1>NYX Investment</h1>
+</header>
 
-<div id="auth">
-  <h2>Login</h2>
-  <input id="user" placeholder="Usuario">
-  <input id="pass" type="password" placeholder="Contraseña">
+<nav>
+  <button onclick="show('auth')">Login</button>
+  <button onclick="show('register')">Registro</button>
+  <button onclick="show('plans')">Planes</button>
+  <button onclick="show('dashboard')">Dashboard</button>
+</nav>
+
+<!-- LOGIN -->
+<section id="auth">
+  <h2>Iniciar sesión</h2>
+  <input id="loginUser" placeholder="Usuario">
+  <input id="loginPass" type="password" placeholder="Contraseña">
   <button onclick="login()">Entrar</button>
-</div>
+</section>
 
-<div id="dashboard" style="display:none;">
-  <h2>Dashboard</h2>
+<!-- REGISTRO -->
+<section id="register" style="display:none;">
+  <h2>Registro</h2>
+  <input id="regUser" placeholder="Usuario">
+  <input id="regPass" type="password" placeholder="Contraseña">
+  <button onclick="register()">Crear cuenta</button>
+</section>
 
-  <p>Usuario: <span id="username"></span></p>
-  <p>Balance: S/830 <span id="balance">0</span></p>
+<!-- PLANES -->
+<section id="plans" style="display:none;">
+  <h2>Planes</h2>
+
+  <div class="plan" onclick="selectPlan(700)">Plan 700 → 15 diarios</div>
+  <div class="plan" onclick="selectPlan(1000)">Plan 1000 → 29 diarios</div>
+  <div class="plan" onclick="selectPlan(1500)">Plan 1500 → 59 diarios</div>
+
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" style="display:none;">
+  <h2>Panel</h2>
+
+  <p>Usuario: <span id="user"></span></p>
+  <p>Saldo: S/. <span id="balance">0</span></p>
+  <p>Plan: <span id="plan"></span></p>
 
   <h3>Depositar</h3>
   <p>Wallet: <span id="wallet"></span></p>
@@ -28,15 +59,17 @@
   <button onclick="deposit()">Depositar 500</button>
 
   <h3>Retirar</h3>
+  <input id="account" placeholder="Número de cuenta">
   <select id="bank">
     <option>BCP</option>
     <option>BBVA</option>
     <option>Interbank</option>
     <option>Scotiabank</option>
+    <option>BanBif</option>
   </select>
   <button onclick="withdraw()">Retirar 500</button>
 
-</div>
+</section>
 
 <script src="script.js"></script>
 </body>
