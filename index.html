@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>NYX PRO</title>
+<title>NYX</title>
 
 <style>
 body{background:#0a0a0a;color:white;font-family:Arial;text-align:center}
@@ -15,24 +15,31 @@ input,button,select{margin:5px;padding:8px}
 
 <body>
 
-<h1>NYX INVESTMENT</h1>
+<h1>NYX</h1>Empresa valuado en 1.5 mil millones de dólares.
+  SPACEX Está apunto de lanzar esa empresa en bolsa por lo que valrá 5 dólares por cada acción. 
+Tu futuro está en tus manos, no la desaproveches, es momento de comprar acciones
 
+  
 <nav>
+  
 <button onclick="show('login')">Login</button>
 <button onclick="show('register')">Registro</button>
 <button onclick="show('plans')">Planes</button>
 <button onclick="show('dashboard')">Dashboard</button>
 </nav>
 
-<!-- LOGIN -->
 <div id="login">
 <h2>Login</h2>
 <input id="luser" placeholder="Usuario">
 <input id="lpass" type="password" placeholder="Contraseña">
 <button onclick="login()">Entrar</button>
 </div>
-
-<!-- REGISTRO -->
+OFERTA SOLO POR 3 DÍAS.
+  ESTA EMPRESA MILLONARIA SORTEA 10 IPHONES 17 PRO MAX A SOLO 289.99 SOL POR USUARIOS AFORTUNADOS DE PERTENECER A NYX
+  OFERTA EN 3 DÍAS HASTA ACABAR STOCKS
+  RECLAMAR AQUÍ 👇
+  
+WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
 <div id="register" class="hidden">
 <h2>Registro</h2>
 <input id="ruser" placeholder="Usuario">
@@ -40,30 +47,28 @@ input,button,select{margin:5px;padding:8px}
 <button onclick="register()">Crear cuenta</button>
 </div>
 
-<!-- PLANES -->
 <div id="plans" class="hidden">
 <h2>Planes</h2>
-<div class="plan" onclick="setPlan(700)">Plan 700 → 15 diarios</div>
-<div class="plan" onclick="setPlan(1000)">Plan 1000 → 29 diarios</div>
-<div class="plan" onclick="setPlan(1500)">Plan 1500 → 59 diarios</div>
+<div class="plan" onclick="setPlan(700)">Plan 700 → +15 diarios</div>
+<div class="plan" onclick="setPlan(1000)">Plan 1000 → +29 diarios</div>
+<div class="plan" onclick="setPlan(1500)">Plan 1500 → +59 diarios</div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="hidden">
 <h2>Dashboard</h2>
 
-<p>Usuario: <span id="user"></span></p>
-<p>Saldo: S/830 <span id="bal">0</span></p>
-<p>Plan: <span id="plan"></span></p>
+<p>Usuario: Mariluz Quispe Huaman <span id="user"></span></p>
+<p>Saldo: S/830 <span id="bal"></span></p>
+<p>Plan: 700 <span id="plan"></span></p>
 
 <h3>Depositar</h3>
-<p>Wallet: <span id="wallet"></span></p>
-<button onclick="copy()">Copiar Wallet</button>
+<p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5 <span id="wallet"></span></p>
+<button onclick="copy()">Copiar</button>
 <button onclick="deposit()">Depositar 500</button>
 
 <h3>Retirar</h3>
-<input id="acc" placeholder="Número de cuenta">
-<select id="bank">
+<input id="acc" placeholder="Cuenta bancaria">
+<select>
 <option>BCP</option>
 <option>BBVA</option>
 <option>Interbank</option>
@@ -78,7 +83,6 @@ input,button,select{margin:5px;padding:8px}
 
 const wallet="TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
 
-// CAMBIAR SECCIÓN
 function show(id){
 ["login","register","plans","dashboard"].forEach(x=>{
 document.getElementById(x).classList.add("hidden");
@@ -86,40 +90,35 @@ document.getElementById(x).classList.add("hidden");
 document.getElementById(id).classList.remove("hidden");
 }
 
-// REGISTRO
 function register(){
 let u=ruser.value;
 let p=rpass.value;
 let users=JSON.parse(localStorage.getItem("users"))||{};
 
-if(users[u]){ alert("Usuario ya existe"); return; }
+if(users[u]){alert("Usuario existe");return;}
 
 users[u]={pass:p,balance:0,plan:null,last:Date.now()};
 localStorage.setItem("users",JSON.stringify(users));
-
-alert("Cuenta creada");
+alert("Registrado");
 }
 
-// LOGIN
 function login(){
 let u=luser.value;
 let p=lpass.value;
 let users=JSON.parse(localStorage.getItem("users"))||{};
 
 if(!users[u]||users[u].pass!==p){
-alert("Datos incorrectos"); return;
+alert("Error");return;
 }
 
 localStorage.setItem("current",u);
-
 show("dashboard");
 update();
 }
 
-// PLANES
 function setPlan(p){
 let u=localStorage.getItem("current");
-if(!u){ alert("Primero inicia sesión"); return; }
+if(!u){alert("Login primero");return;}
 
 let users=JSON.parse(localStorage.getItem("users"));
 
@@ -133,30 +132,28 @@ alert("Plan activado");
 update();
 }
 
-// GANANCIAS AUTOMÁTICAS
-function earnings(user){
+function earn(u){
 let rates={700:15,1000:29,1500:59};
 
-if(!user.plan) return;
+if(!u.plan)return;
 
 let now=Date.now();
-let diff=now-user.last;
+let diff=now-u.last;
 
-let days=Math.floor(diff/(1000*60*60*24));
+let d=Math.floor(diff/(1000*60*60*24));
 
-if(days>0){
-user.balance+=rates[user.plan]*days;
-user.last=now;
+if(d>0){
+u.balance+=rates[u.plan]*d;
+u.last=now;
 }
 }
 
-// ACTUALIZAR
 function update(){
 let u=localStorage.getItem("current");
 let users=JSON.parse(localStorage.getItem("users"));
 let data=users[u];
 
-earnings(data);
+earn(data);
 
 localStorage.setItem("users",JSON.stringify(users));
 
@@ -166,7 +163,6 @@ document.getElementById("plan").innerText=data.plan||"Ninguno";
 document.getElementById("wallet").innerText=wallet;
 }
 
-// DEPOSITAR
 function deposit(){
 let u=localStorage.getItem("current");
 let users=JSON.parse(localStorage.getItem("users"));
@@ -174,33 +170,30 @@ let users=JSON.parse(localStorage.getItem("users"));
 users[u].balance+=500;
 
 localStorage.setItem("users",JSON.stringify(users));
-
 alert("Depósito simulado");
 update();
 }
 
-// RETIRAR
 function withdraw(){
 let acc=document.getElementById("acc").value;
 
-if(!acc){ alert("Ingresa tu cuenta"); return; }
+if(!acc){alert("Ingresa cuenta");return;}
 
 let u=localStorage.getItem("current");
 let users=JSON.parse(localStorage.getItem("users"));
 
 if(users[u].balance<500){
-alert("Mínimo 500"); return;
+alert("Mínimo 500");return;
 }
 
 users[u].balance-=500;
 
 localStorage.setItem("users",JSON.stringify(users));
 
-alert("Fondos enviados (5-10 días)");
+alert("Enviado en 5-10 días");
 update();
 }
 
-// COPIAR WALLET
 function copy(){
 navigator.clipboard.writeText(wallet);
 alert("Copiado");
