@@ -178,3 +178,55 @@ function claimPromo(){
 
   updateDashboard();
 }
+// MOSTRAR POPUP AUTOMÁTICO
+window.onload = function(){
+  const username = localStorage.getItem('currentUser');
+
+  if(username){
+    let users = JSON.parse(localStorage.getItem('users'));
+    const user = users[username];
+
+    if(!user.promoShown){
+      setTimeout(()=>{
+        document.getElementById('promoPopup').style.display = 'flex';
+      }, 1500);
+
+      user.promoShown = true;
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+  }
+};
+
+// CERRAR POPUP
+function closePromo(){
+  document.getElementById('promoPopup').style.display = 'none';
+}
+
+// RECLAMAR PROMO
+function claimPromo(){
+  const username = localStorage.getItem('currentUser');
+  if(!username){ alert("Inicia sesión"); return; }
+
+  let users = JSON.parse(localStorage.getItem('users'));
+  const user = users[username];
+
+  if(user.promoClaimed){
+    document.getElementById('promoStatus').innerText = "⚠️ Ya reclamaste esta promoción.";
+    return;
+  }
+
+  if(user.balance < 500){
+    alert("Necesitas mínimo S/.500");
+    return;
+  }
+
+  user.balance -= 500;
+  user.promoClaimed = true;
+
+  localStorage.setItem('users', JSON.stringify(users));
+
+  document.getElementById('promoStatus').innerText =
+    "🎉 Pedido confirmado. Procesando envío (5-10 días).";
+
+  updateDashboard();
+}
