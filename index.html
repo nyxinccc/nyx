@@ -2,75 +2,193 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NYX</title>
-<link rel="stylesheet" href="styles.css">
+<style>
+body { background:#0a0a0a; color:white; font-family:Arial; text-align:center; }
+input,button,select { margin:5px; padding:8px; }
+nav button { margin:5px; }
+.plan { border:1px solid #00ffcc; margin:10px; padding:10px; cursor:pointer; }
+.hidden { display:none; }
+</style>
 </head>
+
 <body>
 
-<header>
-  <h1>NYX Investment</h1>
-</header>
+<h1>NYX SIMULADOR</h1>
 
 <nav>
-  <button onclick="show('auth')">Login</button>
-  <button onclick="show('register')">Registro</button>
-  <button onclick="show('plans')">Planes</button>
-  <button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('login')">Login</button>
+<button onclick="show('register')">Registro</button>
+<button onclick="show('plans')">Planes</button>
+<button onclick="show('dashboard')">Dashboard</button>
 </nav>
 
 <!-- LOGIN -->
-<section id="auth">
-  <h2>Iniciar sesión</h2>
-  <input id="loginUser" placeholder="Usuario">
-  <input id="loginPass" type="password" placeholder="Contraseña">
-  <button onclick="login()">Entrar</button>
-</section>
+<div id="login">
+<h2>Login</h2>
+<input id="luser" placeholder="Usuario">
+<input id="lpass" type="password" placeholder="Contraseña">
+<button onclick="login()">Entrar</button>
+</div>
 
 <!-- REGISTRO -->
-<section id="register" style="display:none;">
-  <h2>Registro</h2>
-  <input id="regUser" placeholder="Usuario">
-  <input id="regPass" type="password" placeholder="Contraseña">
-  <button onclick="register()">Crear cuenta</button>
-</section>
+<div id="register" class="hidden">
+<h2>Registro</h2>
+<input id="ruser" placeholder="Usuario">
+<input id="rpass" type="password" placeholder="Contraseña">
+<button onclick="register()">Crear</button>
+</div>
 
 <!-- PLANES -->
-<section id="plans" style="display:none;">
-  <h2>Planes</h2>
-
-  <div class="plan" onclick="selectPlan(700)">Plan 700 → 15 diarios</div>
-  <div class="plan" onclick="selectPlan(1000)">Plan 1000 → 29 diarios</div>
-  <div class="plan" onclick="selectPlan(1500)">Plan 1500 → 59 diarios</div>
-
-</section>
+<div id="plans" class="hidden">
+<h2>Planes</h2>
+<div class="plan" onclick="setPlan(700)">Plan 700 → +15 diarios</div>
+<div class="plan" onclick="setPlan(1000)">Plan 1000 → +29 diarios</div>
+<div class="plan" onclick="setPlan(1500)">Plan 1500 → +59 diarios</div>
+</div>
 
 <!-- DASHBOARD -->
-<section id="dashboard" style="display:none;">
-  <h2>Panel</h2>
+<div id="dashboard" class="hidden">
+<h2>Dashboard</h2>
 
-  <p>Usuario: <span id="user"></span></p>
-  <p>Saldo: S/830 <span id="balance">0</span></p>
-  <p>Plan: <span id="plan"></span></p>
+<p>Usuario: <span id="user"></span></p>
+<p>Saldo: S/. <span id="bal">0</span></p>
+<p>Plan: <span id="plan"></span></p>
 
-  <h3>Depositar</h3>
-  <p>Wallet: <span id="wallet"></span></p>
-  <button onclick="copyWallet()">Copiar</button>
-  <button onclick="deposit()">Depositar 500</button>
+<h3>Depositar</h3>
+<p>Wallet: <span id="wallet"></span></p>
+<button onclick="copy()">Copiar</button>
+<button onclick="deposit()">Depositar 500</button>
 
-  <h3>Retirar</h3>
-  <input id="account" placeholder="Número de cuenta">
-  <select id="bank">
-    <option>BCP</option>
-    <option>BBVA</option>
-    <option>Interbank</option>
-    <option>Scotiabank</option>
-    <option>BanBif</option>
-  </select>
-  <button onclick="withdraw()">Retirar 500</button>
+<h3>Retirar</h3>
+<input id="acc" placeholder="Cuenta bancaria">
+<select id="bank">
+<option>BCP</option>
+<option>BBVA</option>
+<option>Interbank</option>
+<option>Scotiabank</option>
+<option>BanBif</option>
+</select>
+<button onclick="withdraw()">Retirar 500</button>
 
-</section>
+</div>
 
-<script src="script.js"></script>
+<script>
+let wallet="TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
+
+// CAMBIAR SECCIONES
+function show(id){
+["login","register","plans","dashboard"].forEach(x=>{
+document.getElementById(x).classList.add("hidden");
+});
+document.getElementById(id).classList.remove("hidden");
+}
+
+// REGISTRO
+function register(){
+let u=ruser.value;
+let p=rpass.value;
+let users=JSON.parse(localStorage.getItem("users"))||{};
+
+if(users[u]){ alert("Usuario existe"); return; }
+
+users[u]={pass:p,balance:0,plan:null,last:Date.now()};
+localStorage.setItem("users",JSON.stringify(users));
+alert("Registrado");
+}
+
+// LOGIN
+function login(){
+let u=luser.value;
+let p=lpass.value;
+let users=JSON.parse(localStorage.getItem("users"))||{};
+
+if(!users[u]||users[u].pass!==p){ alert("Error"); return; }
+
+localStorage.setItem("current",u);
+show("dashboard");
+update();
+}
+
+// PLAN
+function setPlan(p){
+let u=localStorage.getItem("current");
+if(!u){ alert("Login primero"); return; }
+
+let users=JSON.parse(localStorage.getItem("users"));
+users[u].plan=p;
+users[u].balance=p;
+users[u].last=Date.now();
+
+localStorage.setItem("users",JSON.stringify(users));
+alert("Plan activado");
+update();
+}
+
+// GANANCIAS
+function earn(u){
+let rates={700:15,1000:29,1500:59};
+let now=Date.now();
+let diff=now-u.last;
+let d=Math.floor(diff/(1000*60*60*24));
+
+if(d>0){
+u.balance+=rates[u.plan]*d;
+u.last=now;
+}
+}
+
+// ACTUALIZAR
+function update(){
+let u=localStorage.getItem("current");
+let users=JSON.parse(localStorage.getItem("users"));
+let data=users[u];
+
+if(data.plan) earn(data);
+
+localStorage.setItem("users",JSON.stringify(users));
+
+document.getElementById("user").innerText=u;
+document.getElementById("bal").innerText=data.balance;
+document.getElementById("plan").innerText=data.plan||"Ninguno";
+document.getElementById("wallet").innerText=wallet;
+}
+
+// DEPOSITAR
+function deposit(){
+let u=localStorage.getItem("current");
+let users=JSON.parse(localStorage.getItem("users"));
+
+users[u].balance+=500;
+
+localStorage.setItem("users",JSON.stringify(users));
+alert("Depósito simulado");
+update();
+}
+
+// RETIRAR
+function withdraw(){
+let acc=document.getElementById("acc").value;
+if(!acc){ alert("Ingresa cuenta"); return; }
+
+let u=localStorage.getItem("current");
+let users=JSON.parse(localStorage.getItem("users"));
+
+if(users[u].balance<500){ alert("Mínimo 500"); return; }
+
+users[u].balance-=500;
+
+localStorage.setItem("users",JSON.stringify(users));
+alert("Enviado en 5-10 días");
+update();
+}
+
+// COPIAR
+function copy(){
+navigator.clipboard.writeText(wallet);
+alert("Copiado");
+}
+</script>
+
 </body>
 </html>
