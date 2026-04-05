@@ -11,3 +11,26 @@ header h1 { color:#00ffcc; margin:0; }
 .faq-item p { margin:5px 0 15px 0; }
 #auth input, #dashboard input, #dashboard select, #dashboard button { display:block; margin:10px auto; padding:8px; border-radius:5px; border:none; font-size:14px; }
 footer { text-align:center; padding:20px 0; background:#111; border-top:1px solid #00ffcc33; }
+.promo-box {
+  border: 2px solid gold;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 500px;
+  margin: 20px auto;
+  background: linear-gradient(135deg, #111, #1a1a1a);
+  box-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.promo-box h3 {
+  color: gold;
+}
+
+.promo-box button {
+  background: gold;
+  color: black;
+  font-weight: bold;
+}
+
+.promo-box button:hover {
+  background: orange;
+}
