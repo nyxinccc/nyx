@@ -1,311 +1,82 @@
+let balance = 0;
+const wallet = "TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
+
 function showSection(id){
-  const sections = ['auth','plansSection','dashboard','news','faq'];
-  sections.forEach(sec => {
-    document.getElementById(sec).style.display = (sec===id) ? 'block' : 'none';
-  });
+  document.getElementById('auth').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById(id).style.display = 'block';
 }
 
-// Registro/Login
-function registerUser() {
-  const username = document.getElementById('regUsername').value;
-  const password = document.getElementById('regPassword').value;
-  if(!username || !password){ alert("Completa todos los campos"); return; }
+function login(){
+  showSection('dashboard');
+  document.getElementById('wallet').innerText = wallet;
 
-  let users = JSON.parse(localStorage.getItem('users')) || {};
-  if(users[username]){ alert("Usuario ya existe"); return; }
-
-  users[username] = { password, balance:0, plan:null, bank:null };
-  localStorage.setItem('users', JSON.stringify(users));
-  alert("Registro exitoso! Haz login.");
-  document.getElementById('regUsername').value = '';
-  document.getElementById('regPassword').value = '';
-}
-
-function loginUser() {
-  const username = document.getElementById('loginUsername').value;
-  const password = document.getElementById('loginPassword').value;
-  let users = JSON.parse(localStorage.getItem('users')) || {};
-
-  if(!users[username] || users[username].password !== password){
-    alert("Usuario o contraseña incorrectos"); return;
-  }
-
-  localStorage.setItem('currentUser', username);
-  document.getElementById('auth').style.display='none';
-  document.getElementById('plansSection').style.display='block';
-  document.getElementById('dashboard').style.display='block';
-  updateDashboard();
-}
-
-// Guardar datos bancarios
-function saveBankInfo(){
-  const username = localStorage.getItem('currentUser');
-  if(!username) return;
-  let users = JSON.parse(localStorage.getItem('users'));
-  const bcpNumber = document.getElementById('bcpNumber').value;
-  const bcpName = document.getElementById('bcpName').value;
-  if(!bcpNumber || !bcpName){ alert("Completa ambos campos"); return; }
-
-  users[username].bank = { number:bcpNumber, name:bcpName };
-  localStorage.setItem('users', JSON.stringify(users));
-  alert("Datos bancarios guardados");
-  updateDashboard();
-}
-
-// Planes
-const planData = { "700":{daily:15}, "1000":{daily:29}, "1500":{daily:59} };
-document.querySelectorAll('.plan').forEach((planDiv,index)=>{
-  planDiv.addEventListener('click',()=>{
-    const username = localStorage.getItem('currentUser');
-    if(!username){ alert("Haz login primero"); return; }
-    const planKeys = ["700","1000","1500"];
-    let users = JSON.parse(localStorage.getItem('users'));
-    users[username].plan = planKeys[index];
-    users[username].balance = parseInt(planKeys[index]);
-    localStorage.setItem('users', JSON.stringify(users));
-    alert(`Plan ${planKeys[index]} seleccionado!`);
-    updateDashboard();
-  });
-});
-
-// Dashboard
-function updateDashboard(){
-  const username = localStorage.getItem('currentUser');
-  if(!username) return;
-
-  let users = JSON.parse(localStorage.getItem('users'));
-  const user = users[username];
-
-  // 🔥 APLICAR GANANCIAS AUTOMÁTICAS
-  applyDailyEarnings(user);
-
-  // Guardar cambios
-  localStorage.setItem('users', JSON.stringify(users));
-
-  document.getElementById('userNameDisplay').innerText = username;
-  document.getElementById('userPlanDisplay').innerText = user.plan || "Ninguno";
-  document.getElementById('userBalanceDisplay').innerText = user.balance;
-
-  if(user.bank){
-    document.getElementById('bankInfoDisplay').innerText =
-      `Cuenta BCP: ${user.bank.number} | Titular: ${user.bank.name}`;
-  } else {
-    document.getElementById('bankInfoDisplay').innerText = "";
-  }
-
-  document.getElementById('usdtWallet').innerText = "TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
-}
-
-// Copiar wallet al portapapeles
-function copyWallet(){
-  const wallet = document.getElementById('usdtWallet').innerText;
-  navigator.clipboard.writeText(wallet).then(()=>alert("Wallet copiada al portapapeles!"));
-}
-
-// Depósito simulado
-function deposit(){
-  const username = localStorage.getItem('currentUser');
-  let users = JSON.parse(localStorage.getItem('users'));
-  users[username].balance += 500; 
-  localStorage.setItem('users', JSON.stringify(users));
-  alert(`Depósito simulado de S/.500 agregado a tu balance.\nWallet USDT: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5`);
-  updateDashboard();
-}
-
-// Retiro simulado
-function withdraw(){
-  const username = localStorage.getItem('currentUser');
-  let users = JSON.parse(localStorage.getItem('users'));
-  const bank = document.getElementById('withdrawBank').value;
-  if(!bank){ alert("Selecciona un banco"); return; }
-  if(users[username].balance < 500){ alert("Balance insuficiente, mínimo retiro 500 soles"); return; }
-
-  users[username].balance -= 500;
-  localStorage.setItem('users', JSON.stringify(users));
-  alert(`Retiro simulado a tu banco ${bank} confirmado.\nFondos enviados en 5-10 días.`);
-  updateDashboard();
-}
-users[username].plan = planKeys[index];
-users[username].balance = parseInt(planKeys[index]);
-
-// NUEVO: guardar última fecha
-users[username].lastClaim = Date.now();
-function applyDailyEarnings(user){
-  if(!user.plan) return;
-
-  const dailyRates = {
-    "700": 15,
-    "1000": 29,
-    "1500": 59
-  };
-
-  const now = Date.now();
-  const last = user.lastClaim || now;
-
-  const diffTime = now - last;
-  const daysPassed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-  if(daysPassed > 0){
-    const earnings = dailyRates[user.plan] * daysPassed;
-    user.balance += earnings;
-    user.lastClaim = now;
-  }
-}
-function claimPromo(){
-  const username = localStorage.getItem('currentUser');
-  if(!username){ alert("Debes iniciar sesión"); return; }
-
-  let users = JSON.parse(localStorage.getItem('users'));
-  const user = users[username];
-
-  if(user.promoClaimed){
-    document.getElementById('promoStatus').innerText = "⚠️ Ya reclamaste esta promoción.";
-    return;
-  }
-
-  if(user.balance < 500){
-    alert("Necesitas al menos S/.500 para acceder a esta promoción");
-    return;
-  }
-
-  user.balance -= 500;
-  user.promoClaimed = true;
-
-  localStorage.setItem('users', JSON.stringify(users));
-
-  document.getElementById('promoStatus').innerText =
-    "🎉 Solicitud enviada! Tu iPhone será procesado (simulado). Tiempo estimado: 5-10 días.";
-
-  updateDashboard();
-}
-// MOSTRAR POPUP AUTOMÁTICO
-window.onload = function(){
-  const username = localStorage.getItem('currentUser');
-
-  if(username){
-    let users = JSON.parse(localStorage.getItem('users'));
-    const user = users[username];
-
-    if(!user.promoShown){
-      setTimeout(()=>{
-        document.getElementById('promoPopup').style.display = 'flex';
-      }, 1500);
-
-      user.promoShown = true;
-      localStorage.setItem('users', JSON.stringify(users));
-    }
-  }
-};
-
-// CERRAR POPUP
-function closePromo(){
-  document.getElementById('promoPopup').style.display = 'none';
-}
-
-// RECLAMAR PROMO
-function claimPromo(){
-  const username = localStorage.getItem('currentUser');
-  if(!username){ alert("Inicia sesión"); return; }
-
-  let users = JSON.parse(localStorage.getItem('users'));
-  const user = users[username];
-
-  if(user.promoClaimed){
-    document.getElementById('promoStatus').innerText = "⚠️ Ya reclamaste esta promoción.";
-    return;
-  }
-
-  if(user.balance < 500){
-    alert("Necesitas mínimo S/.500");
-    return;
-  }
-
-  user.balance -= 500;
-  user.promoClaimed = true;
-
-  localStorage.setItem('users', JSON.stringify(users));
-
-  document.getElementById('promoStatus').innerText =
-    "🎉 Pedido confirmado. Procesando envío (5-10 días).";
-
-  updateDashboard();
-}
-// 🔊 POPUP AUTOMÁTICO + SONIDO
-window.onload = function(){
-  const username = localStorage.getItem('currentUser');
-
-  if(username){
-    let users = JSON.parse(localStorage.getItem('users'));
-    const user = users[username];
-
-    if(!user.promoShown){
-      setTimeout(()=>{
-        document.getElementById('promoPopup').style.display = 'flex';
-
-        // sonido
-        document.getElementById('promoSound').play();
-
-        startCountdown();
-        randomStock();
-
-      }, 1500);
-
-      user.promoShown = true;
-      localStorage.setItem('users', JSON.stringify(users));
-    }
-
-    startFakeNotifications();
-  }
-};
-
-// ⏳ CONTADOR
-function startCountdown(){
-  let time = 300; // 5 minutos
-
-  const interval = setInterval(()=>{
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-
-    document.getElementById('countdown').innerText =
-      `${minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
-
-    time--;
-
-    if(time < 0){
-      clearInterval(interval);
-      document.getElementById('countdown').innerText = "FINALIZADO";
-    }
+  // Mostrar popup
+  setTimeout(()=>{
+    document.getElementById('promoPopup').style.display = 'flex';
+    startCountdown();
+    randomStock();
   },1000);
 }
 
-// 📉 STOCK DINÁMICO
-function randomStock(){
-  let stock = Math.floor(Math.random() * 5) + 3; // entre 3 y 7
+function deposit(){
+  balance += 500;
+  update();
+}
 
+function withdraw(){
+  if(balance < 500){
+    alert("Mínimo retiro 500");
+    return;
+  }
+  balance -= 500;
+  alert("Fondos enviados. Espera 5-10 días.");
+  update();
+}
+
+function update(){
+  document.getElementById('balance').innerText = balance;
+}
+
+function copyWallet(){
+  navigator.clipboard.writeText(wallet);
+  alert("Wallet copiada");
+}
+
+function closePopup(){
+  document.getElementById('promoPopup').style.display = 'none';
+}
+
+function claim(){
+  if(balance < 500){
+    alert("Necesitas mínimo 500");
+    return;
+  }
+  balance -= 500;
+  alert("Pedido realizado. Llegará en 5-10 días.");
+  update();
+}
+
+// ⏳ CONTADOR
+function startCountdown(){
+  let time = 300;
+  setInterval(()=>{
+    let m = Math.floor(time/60);
+    let s = time%60;
+    document.getElementById('countdown').innerText =
+      m + ":" + (s<10?"0"+s:s);
+    time--;
+  },1000);
+}
+
+// 📉 STOCK
+function randomStock(){
+  let stock = 5;
   setInterval(()=>{
     if(stock > 1){
       stock--;
-      document.getElementById('stockText').innerText =
-        `🔥 Quedan ${stock} unidades disponibles`;
+      document.getElementById('stock').innerText =
+        "Quedan " + stock + " unidades";
     }
-  }, 8000);
-}
-
-// 🔔 NOTIFICACIONES FALSAS
-function startFakeNotifications(){
-  const names = ["Carlos", "Luis", "María", "Ana", "José", "Pedro"];
-
-  setInterval(()=>{
-    const name = names[Math.floor(Math.random()*names.length)];
-    const amount = [15,29,59][Math.floor(Math.random()*3)];
-
-    const notif = document.getElementById('liveNotif');
-    notif.innerText = `💰 ${name} ganó S/.${amount} hoy`;
-    notif.style.display = 'block';
-
-    setTimeout(()=>{
-      notif.style.display = 'none';
-    },4000);
-
-  },7000);
+  },8000);
 }
