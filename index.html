@@ -11,11 +11,37 @@
   <div class="promo-content">
     <span class="close-btn" onclick="closePromo()">✖</span>
 
+    <h2>🇵🇪 PROMOCIÓN POR ANIVERSARIO</h2>
+
+    <div id="promoPopup" class="promo-popup">
+  <div class="promo-content">
+    <span class="close-btn" onclick="closePromo()">✖</span>
+
     <h2>🇵🇪 PROMOCIÓN FIESTAS PATRIAS</h2>
 
-    <p>🎉 NYX lanza una campaña exclusiva para usuarios activos</p>
+    <p>🎉 Campaña exclusiva para usuarios activos</p>
 
     <h3>📱 iPhone 17 Pro Max</h3>
+
+    <p><strong>Solo por S/. 500</strong> (simulado)</p>
+
+    <p id="stockText">🔥 Quedan 7 unidades disponibles</p>
+
+    <p>⏳ Oferta termina en: <span id="countdown">05:00</span></p>
+
+    <button onclick="claimPromo()">RECLAMAR AHORA</button>
+
+    <p id="promoStatus"></p>
+  </div>
+</div>
+
+<!-- SONIDO -->
+<audio id="promoSound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg">
+</audio>
+
+<!-- NOTIFICACIONES -->
+<div id="liveNotif" class="live-notif"></div>
 
     <p><strong>Solo por S/. 500</strong> (Real)</p>
 
