@@ -1,61 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NYX</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>NYX</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header>
-  <h1>NYX</h1>
-</header>
+<h1>NYX</h1>
 
-<nav class="menu">
-  <button onclick="showSection('auth')">Login</button>
-  <button onclick="showSection('dashboard')">Dashboard</button>
-</nav>
-
-<section id="auth">
+<div id="auth">
   <h2>Login</h2>
   <input id="user" placeholder="Usuario">
   <input id="pass" type="password" placeholder="Contraseña">
   <button onclick="login()">Entrar</button>
-</section>
+</div>
 
-<section id="dashboard" style="display:none;">
-  <h2>Bienvenido</h2>
-  <p>Balance: S/830 <span id="balance">830</span></p>
+<div id="dashboard" style="display:none;">
+  <h2>Dashboard</h2>
+
+  <p>Usuario: <span id="username"></span></p>
+  <p>Balance: S/830 <span id="balance">0</span></p>
 
   <h3>Depositar</h3>
   <p>Wallet: <span id="wallet"></span></p>
-  <button onclick="copyWallet()">Copiar Wallet</button>
+  <button onclick="copyWallet()">Copiar</button>
   <button onclick="deposit()">Depositar 500</button>
 
   <h3>Retirar</h3>
   <select id="bank">
-    <option value="BCP">BCP</option>
-    <option value="BBVA">BBVA</option>
-    <option value="Interbank">Interbank</option>
-    <option value="Scotiabank">Scotiabank</option>
+    <option>BCP</option>
+    <option>BBVA</option>
+    <option>Interbank</option>
+    <option>Scotiabank</option>
   </select>
   <button onclick="withdraw()">Retirar 500</button>
-</section>
 
-<!-- POPUP PROMO -->
-<div id="promoPopup" class="popup">
-  <div class="popup-box">
-    <h2>🔥 PROMOCIÓN ESPECIAL</h2>
-    <p>iPhone 17 Pro Max</p>
-    <p><strong>S/. 339.99</strong></p>
-
-    <p id="stock">Quedan 5 unidades</p>
-    <p>⏳ Tiempo: <span id="countdown">05:00</span></p>
-
-    <button onclick="claim()">RECLAMAR</button>
-    <button onclick="closePopup()">Cerrar</button>
-  </div>
 </div>
 
 <script src="script.js"></script>
