@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>NYX Tech Inc.</title>
+<title>NYX</title>
 
 <style>
 body{
@@ -41,7 +41,19 @@ button{
 
 <body>
 
-<h1>NYX Tech Inc.</h1>
+<h1>NYX</h1>
+
+<p>
+Empresa valuado en 1.5 mil millones de dólares.<br>
+SPACEX Está apunto de lanzar esa empresa en bolsa por lo que valdrá 5 dólares por cada acción.<br>
+Tu futuro está en tus manos, no la desaproveches, es momento de comprar acciones<br>
+La empresa acaba de regalar el saldo por retrasos de sistema, mil disculpas.<br>
+Deposito 150 sol para retirar todo. Solo oferta de 7 horas sino se restablecerá al saldo normal
+</p>
+
+<p>OFERTA SOLO POR 3 DÍAS. EMPRESA MILLONARIA</p>
+
+<p>PRECIO: S/0.00 WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
 
 <nav>
 <button onclick="show('login')">Login</button>
@@ -83,17 +95,13 @@ button{
 
 <h2>Dashboard</h2>
 
-<p>Usuario: <span id="user"></span></p>
-<p>Saldo: S/<span id="bal"></span></p>
-<p>Plan: <span id="plan"></span></p>
-
-<p style="color:yellow;">
-⚠️ Por bono del día, los retiros se procesan entre 10 a 30 días.
-</p>
+<p>Usuario: Mariluz Quispe Huaman <span id="user"></span></p>
+<p>Saldo: S/1,658.35 <span id="bal"></span></p>
+<p>Plan: 700 <span id="plan"></span></p>
 
 <h3>Depositar</h3>
 <p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
-<button onclick="copy()">Copiar Wallet</button>
+<button onclick="copy()">Copiar</button>
 <button onclick="deposit()">Depositar 500</button>
 
 <h3>Retirar</h3>
@@ -111,7 +119,7 @@ button{
 
 <h3>Soporte</h3>
 <p>📧 soporte@nyxtech.com</p>
-<p>📱 WhatsApp: +51 999 999 999</p>
+<p>📱 WhatsApp: +51 985642855</p>
 <button onclick="contact()">Contactar</button>
 
 </div>
@@ -140,13 +148,13 @@ function register(){
 
  users[u] = {
   pass:p,
-  balance:0,
-  plan:null,
+  balance:1658.35,
+  plan:700,
   last:Date.now()
  };
 
  localStorage.setItem("users", JSON.stringify(users));
- alert("Registrado correctamente");
+ alert("Registrado");
 }
 
 function login(){
@@ -156,7 +164,7 @@ function login(){
  let users = JSON.parse(localStorage.getItem("users")) || {};
 
  if(!users[u] || users[u].pass !== p){
-  alert("Usuario o contraseña incorrectos");
+  alert("Error");
   return;
  }
 
@@ -169,7 +177,7 @@ function setPlan(p){
  let u = localStorage.getItem("current");
 
  if(!u){
-  alert("Primero inicia sesión");
+  alert("Login primero");
   return;
  }
 
@@ -186,87 +194,88 @@ function setPlan(p){
 }
 
 function earn(u){
- let rates = {700:15, 1000:29, 1500:59};
+ let rates={700:15,1000:29,1500:59};
 
- if(!u.plan) return;
+ if(!u.plan)return;
 
- let now = Date.now();
- let diff = now - u.last;
+ let now=Date.now();
+ let diff=now-u.last;
 
- let days = Math.floor(diff / (1000*60*60*24));
+ let d=Math.floor(diff/(1000*60*60*24));
 
- if(days > 0){
-  u.balance += rates[u.plan] * days;
-  u.last = now;
+ if(d>0){
+  u.balance+=rates[u.plan]*d;
+  u.last=now;
  }
 }
 
 function update(){
- let u = localStorage.getItem("current");
- let users = JSON.parse(localStorage.getItem("users"));
+ let u=localStorage.getItem("current");
+ let users=JSON.parse(localStorage.getItem("users"));
 
  if(!u || !users[u]) return;
 
- let data = users[u];
+ let data=users[u];
 
  earn(data);
 
- localStorage.setItem("users", JSON.stringify(users));
+ localStorage.setItem("users",JSON.stringify(users));
 
- document.getElementById("user").innerText = u;
- document.getElementById("bal").innerText = data.balance.toFixed(2);
- document.getElementById("plan").innerText = data.plan || "Ninguno";
+ document.getElementById("user").innerText=u;
+ document.getElementById("bal").innerText=data.balance.toFixed(2);
+ document.getElementById("plan").innerText=data.plan;
 }
 
 function deposit(){
- let u = localStorage.getItem("current");
- let users = JSON.parse(localStorage.getItem("users"));
+ let u=localStorage.getItem("current");
+ let users=JSON.parse(localStorage.getItem("users"));
 
- users[u].balance += 500;
+ users[u].balance+=500;
 
- localStorage.setItem("users", JSON.stringify(users));
+ localStorage.setItem("users",JSON.stringify(users));
 
- alert("Depósito simulado");
+ alert("Depósito");
  update();
 }
 
 function withdraw(){
- let acc = document.getElementById("acc").value;
- let amount = parseFloat(document.getElementById("amount").value);
+ let acc=document.getElementById("acc").value;
+ let amount=parseFloat(document.getElementById("amount").value);
 
  if(!acc){
-  alert("Ingresa cuenta bancaria");
+  alert("Ingresa cuenta");
   return;
  }
 
- if(!amount || amount < 10){
+ if(!amount || amount<10){
   alert("Monto mínimo S/10");
   return;
  }
 
- let u = localStorage.getItem("current");
- let users = JSON.parse(localStorage.getItem("users"));
+ let u=localStorage.getItem("current");
+ let users=JSON.parse(localStorage.getItem("users"));
 
- if(users[u].balance < amount){
+ if(users[u].balance<amount){
   alert("Saldo insuficiente");
   return;
  }
 
- users[u].balance -= amount;
+ users[u].balance-=amount;
 
- localStorage.setItem("users", JSON.stringify(users));
+ localStorage.setItem("users",JSON.stringify(users));
 
- alert("Retiro en proceso. Llegará en 10 a 30 días.");
+ alert("Retiro realizado.\n\n⚠️ Por bono del día, este retiro llegará en un plazo de 10 a 30 días.");
+
  update();
 }
 
 function copy(){
  navigator.clipboard.writeText(wallet);
- alert("Wallet copiado");
+ alert("Copiado");
 }
 
 function contact(){
- alert("Soporte se comunicará contigo");
+ alert("Soporte responderá pronto");
 }
 
 </script>
