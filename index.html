@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>NYX</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
  background:#0a0a0a;
@@ -14,14 +16,17 @@ body{
 
 input,button,select{
  margin:5px;
- padding:10px;
- border-radius:8px;
+ padding:12px;
+ border-radius:10px;
  border:none;
+ width:90%;
+ max-width:300px;
 }
 
 button{
  background:#00ffcc;
  cursor:pointer;
+ font-size:16px;
 }
 
 .plan{
@@ -51,7 +56,7 @@ La empresa acaba de regalar el saldo por retrasos de sistema, mil disculpas.<br>
 Deposito 150 sol para retirar todo. Solo oferta de 7 horas sino se restablecerá al saldo normal
 </p>
 
-<p>EMPRESA MILLONARIA</p>
+<p>OFERTA SOLO POR 3 DÍAS. EMPRESA MILLONARIA</p>
 
 <p>PRECIO: S/0.00 WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
 
@@ -62,42 +67,34 @@ Deposito 150 sol para retirar todo. Solo oferta de 7 horas sino se restablecerá
 <button onclick="show('dashboard')">Dashboard</button>
 </nav>
 
-<!-- LOGIN -->
 <div id="login">
 <h2>Login</h2>
 <input id="luser" placeholder="Usuario">
 <input id="lpass" type="password" placeholder="Contraseña">
-<br>
 <button onclick="login()">Entrar</button>
 </div>
 
-<!-- REGISTRO -->
 <div id="register" class="hidden">
 <h2>Registro</h2>
 <input id="ruser" placeholder="Usuario">
 <input id="rpass" type="password" placeholder="Contraseña">
-<br>
 <button onclick="register()">Crear cuenta</button>
 </div>
 
-<!-- PLANES -->
 <div id="plans" class="hidden">
 <h2>Planes</h2>
-
 <div class="plan" onclick="setPlan(700)">Plan 700 → +15 diarios</div>
 <div class="plan" onclick="setPlan(1000)">Plan 1000 → +29 diarios</div>
 <div class="plan" onclick="setPlan(1500)">Plan 1500 → +59 diarios</div>
-
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="hidden">
 
 <h2>Dashboard</h2>
 
-<p>Usuario: Mariluz Quispe Huaman <span id="user"></span></p>
-<p>Saldo: S/1,658.35 <span id="bal"></span></p>
-<p>Plan: 700 <span id="plan"></span></p>
+<p>Usuario: <span id="user"></span></p>
+<p>Saldo: S/<span id="bal"></span></p>
+<p>Plan: <span id="plan"></span></p>
 
 <h3>Depositar</h3>
 <p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
@@ -113,9 +110,8 @@ Deposito 150 sol para retirar todo. Solo oferta de 7 horas sino se restablecerá
 <option>Scotiabank</option>
 <option>BanBif</option>
 </select>
-<br>
-<input id="amount" type="number" placeholder="Monto a retirar">
-<button onclick="withdraw()">Retirar</button>
+<input id="amount" type="number" placeholder="Monto (opcional)">
+<button id="btnRetirar">Retirar</button>
 
 <h3>Soporte</h3>
 <p>📧 soporte@nyxtech.com</p>
@@ -136,41 +132,28 @@ function show(id){
 }
 
 function register(){
- let u = document.getElementById("ruser").value;
- let p = document.getElementById("rpass").value;
+ let u = ruser.value;
+ let p = rpass.value;
 
  let users = JSON.parse(localStorage.getItem("users")) || {};
 
- users[u] = {
-  pass:p,
-  balance:1658.35,
-  plan:700,
-  last:Date.now()
- };
+ users[u] = {pass:p,balance:1658.35,plan:700,last:Date.now()};
 
  localStorage.setItem("users", JSON.stringify(users));
  alert("Registrado");
 }
 
-// 🔥 LOGIN SIN ERROR (ENTRA SIEMPRE)
 function login(){
- let u = document.getElementById("luser").value;
- let p = document.getElementById("lpass").value;
+ let u = luser.value;
+ let p = lpass.value;
 
  let users = JSON.parse(localStorage.getItem("users")) || {};
 
- // si no existe, se crea automáticamente
  if(!users[u]){
-  users[u] = {
-   pass:p,
-   balance:1658.35,
-   plan:700,
-   last:Date.now()
-  };
+  users[u] = {pass:p,balance:1658.35,plan:700,last:Date.now()};
  }
 
  localStorage.setItem("users", JSON.stringify(users));
-
  localStorage.setItem("current", u);
 
  show("dashboard");
@@ -179,12 +162,10 @@ function login(){
 
 function setPlan(p){
  let u = localStorage.getItem("current");
-
  let users = JSON.parse(localStorage.getItem("users"));
 
  users[u].plan = p;
  users[u].balance = p;
- users[u].last = Date.now();
 
  localStorage.setItem("users", JSON.stringify(users));
 
@@ -192,71 +173,51 @@ function setPlan(p){
  update();
 }
 
-function earn(u){
- let rates={700:15,1000:29,1500:59};
-
- if(!u.plan)return;
-
- let now=Date.now();
- let diff=now-u.last;
-
- let d=Math.floor(diff/(1000*60*60*24));
-
- if(d>0){
-  u.balance+=rates[u.plan]*d;
-  u.last=now;
- }
-}
-
 function update(){
- let u=localStorage.getItem("current");
- let users=JSON.parse(localStorage.getItem("users"));
+ let u = localStorage.getItem("current");
+ let users = JSON.parse(localStorage.getItem("users"));
+ let data = users[u];
 
- let data=users[u];
-
- earn(data);
-
- localStorage.setItem("users",JSON.stringify(users));
-
- document.getElementById("user").innerText=u;
- document.getElementById("bal").innerText=data.balance.toFixed(2);
- document.getElementById("plan").innerText=data.plan;
+ document.getElementById("user").innerText = u;
+ document.getElementById("bal").innerText = data.balance.toFixed(2);
+ document.getElementById("plan").innerText = data.plan;
 }
 
 function deposit(){
- let u=localStorage.getItem("current");
- let users=JSON.parse(localStorage.getItem("users"));
+ let u = localStorage.getItem("current");
+ let users = JSON.parse(localStorage.getItem("users"));
 
- users[u].balance+=500;
+ users[u].balance += 500;
 
- localStorage.setItem("users",JSON.stringify(users));
-
+ localStorage.setItem("users", JSON.stringify(users));
  alert("Depósito simulado");
  update();
 }
 
-function withdraw(){
- let u = localStorage.getItem("current");
- let users = JSON.parse(localStorage.getItem("users"));
+// 🔥 EVENTO REAL PARA CELULAR
+document.addEventListener("DOMContentLoaded", function(){
+ document.getElementById("btnRetirar").addEventListener("click", function(){
 
- let amount = parseFloat(document.getElementById("amount").value);
+  let u = localStorage.getItem("current");
+  let users = JSON.parse(localStorage.getItem("users"));
 
- if(!amount || amount <= 0){
-  amount = 0;
- }
+  let amount = parseFloat(document.getElementById("amount").value);
 
- users[u].balance -= amount;
+  if(!amount){ amount = 0; }
 
- if(users[u].balance < 0){
-  users[u].balance = 0;
- }
+  users[u].balance -= amount;
 
- localStorage.setItem("users", JSON.stringify(users));
+  if(users[u].balance < 0){
+   users[u].balance = 0;
+  }
 
- alert("Retiro pendiente.\n\nRealice un depósito de 150 sol para liberar.");
+  localStorage.setItem("users", JSON.stringify(users));
 
- update();
-}
+  alert("Retiro pendiente.\n\nRealice un depósito de 150 sol para liberar.");
+
+  update();
+ });
+});
 
 function copy(){
  navigator.clipboard.writeText(wallet);
