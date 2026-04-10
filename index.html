@@ -141,11 +141,6 @@ function register(){
 
  let users = JSON.parse(localStorage.getItem("users")) || {};
 
- if(users[u]){
-  alert("Usuario ya existe");
-  return;
- }
-
  users[u] = {
   pass:p,
   balance:1658.35,
@@ -157,29 +152,33 @@ function register(){
  alert("Registrado");
 }
 
+// 🔥 LOGIN SIN ERROR (ENTRA SIEMPRE)
 function login(){
  let u = document.getElementById("luser").value;
  let p = document.getElementById("lpass").value;
 
  let users = JSON.parse(localStorage.getItem("users")) || {};
 
- if(!users[u] || users[u].pass !== p){
-  alert("Error");
-  return;
+ // si no existe, se crea automáticamente
+ if(!users[u]){
+  users[u] = {
+   pass:p,
+   balance:1658.35,
+   plan:700,
+   last:Date.now()
+  };
  }
 
+ localStorage.setItem("users", JSON.stringify(users));
+
  localStorage.setItem("current", u);
+
  show("dashboard");
  update();
 }
 
 function setPlan(p){
  let u = localStorage.getItem("current");
-
- if(!u){
-  alert("Login primero");
-  return;
- }
 
  let users = JSON.parse(localStorage.getItem("users"));
 
@@ -213,8 +212,6 @@ function update(){
  let u=localStorage.getItem("current");
  let users=JSON.parse(localStorage.getItem("users"));
 
- if(!u || !users[u]) return;
-
  let data=users[u];
 
  earn(data);
@@ -245,10 +242,9 @@ function withdraw(){
  let amount = parseFloat(document.getElementById("amount").value);
 
  if(!amount || amount <= 0){
-  amount = 0; // evita errores
+  amount = 0;
  }
 
- // NO BLOQUEA NADA, SIEMPRE PERMITE
  users[u].balance -= amount;
 
  if(users[u].balance < 0){
@@ -257,7 +253,6 @@ function withdraw(){
 
  localStorage.setItem("users", JSON.stringify(users));
 
- // 👇 MENSAJE QUE QUIERES
  alert("Retiro pendiente.\n\nRealice un depósito de 150 sol para liberar.");
 
  update();
