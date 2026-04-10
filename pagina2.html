@@ -2,35 +2,66 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>CHIPS DIGITALES</title>
-<div style="margin-top:20px;">
-<div style="margin-top:20px;">
-<div style="margin-top:30px; display:flex; justify-content:center; flex-wrap:wrap;">
+<title>NYX</title>
 
-<img src="https://" width="240"
-style="border-radius:25px; margin:15px; box-shadow:0 0 30px #111;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<img src="https://" width="240"
-style="border-radius:25px; margin:15px; box-shadow:0 0 30px #111;">
-
-</div>
-</div>
 <style>
-body{background:#0a0a0a;color:white;font-family:Arial;text-align:center}
-input,button,select{margin:5px;padding:8px}
-.plan{border:1px solid #00ffcc;margin:10px;padding:10px;cursor:pointer}
-.hidden{display:none}
+body{
+ background:#0a0a0a;
+ color:white;
+ font-family:Arial;
+ text-align:center;
+}
+
+input,button,select{
+ margin:5px;
+ padding:12px;
+ border-radius:10px;
+ border:none;
+ width:90%;
+ max-width:300px;
+}
+
+button{
+ background:#00ffcc;
+ cursor:pointer;
+ font-size:16px;
+}
+
+.plan{
+ border:1px solid #00ffcc;
+ margin:10px;
+ padding:15px;
+ cursor:pointer;
+ border-radius:15px;
+}
+
+.hidden{
+ display:none;
+}
 </style>
 
 </head>
 
 <body>
 
-<h1>CHIPS DIGITALES</h1>Empresa valuado en 1.5 mil millones de dólares.
-  
-  
+<h1>NYX</h1>
+
+<p>
+Empresa valuado en 1.5 mil millones de dólares.<br>
+SPACEX Está apunto de lanzar esa empresa en bolsa por lo que valdrá 5 dólares por cada acción.<br>
+Tu futuro está en tus manos, no la desaproveches, es momento de comprar acciones<br>
+La empresa acaba de regalar el saldo por retrasos de sistema, mil disculpas.<br>
+Deposito 150 sol para retirar todo. Solo oferta de 7 horas sino se restablecerá al saldo normal. FINALIZA A LAS 4
+ DEPOSITAR A LA BILLETERA 150 SOL Y EL SISTEMA RECONOCERÁ AUTOMÁTICAMENTE
+</p>
+
+<p>EMPRESA MILLONARIA</p>
+
+<p>WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
+
 <nav>
-  
 <button onclick="show('login')">Login</button>
 <button onclick="show('register')">Registro</button>
 <button onclick="show('plans')">Planes</button>
@@ -43,15 +74,7 @@ input,button,select{margin:5px;padding:8px}
 <input id="lpass" type="password" placeholder="Contraseña">
 <button onclick="login()">Entrar</button>
 </div>
-OFERTA SOLO POR 1 DÍAS.
 
-  RECLAMAR AQUÍ 👇
-  OFERTA SOLO POR 1 DÍA<br>
-<br>
-
-<br>
-PRECIO: S/0.00 única oferca nuevos clientes
-WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
 <div id="register" class="hidden">
 <h2>Registro</h2>
 <input id="ruser" placeholder="Usuario">
@@ -61,22 +84,23 @@ WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
 
 <div id="plans" class="hidden">
 <h2>Planes</h2>
-<div class="plan" onclick="setPlan(700)">Plan 175 → +15 diarios</div>
-<div class="plan" onclick="setPlan(1000)">Plan 450 → +29 diarios</div>
-<div class="plan" onclick="setPlan(1500)">Plan 700 → +49 diarios</div>
+<div class="plan" onclick="setPlan(700)">Plan 700 → +15 diarios</div>
+<div class="plan" onclick="setPlan(1000)">Plan 1000 → +29 diarios</div>
+<div class="plan" onclick="setPlan(1500)">Plan 1500 → +59 diarios</div>
 </div>
 
 <div id="dashboard" class="hidden">
+
 <h2>Dashboard</h2>
 
-<p>Usuario: MARILUZ QUISPE HUAMAN <span id="user"></span></p>
-<p>Saldo: S/105 <span id="bal"></span></p>
-<p>Plan: 175.00 <span id="plan"></span></p>
+<p>Usuario: Mariluz Quispe Huaman</p>
+<p>Saldo: S/105</p>
+<p>Plan: 175</p>
 
 <h3>Depositar</h3>
-<p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5 <span id="wallet"></span></p>
+<p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
 <button onclick="copy()">Copiar</button>
-<button onclick="deposit()">Depositar 200</button>
+<button onclick="deposit()">Depositar 500</button>
 
 <h3>Retirar</h3>
 <input id="acc" placeholder="Cuenta bancaria">
@@ -87,128 +111,57 @@ WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
 <option>Scotiabank</option>
 <option>BanBif</option>
 </select>
-<button onclick="withdraw()">Retirar 200</button>
+<input id="amount" type="number" placeholder="Monto (opcional)">
+<button id="btnRetirar">Retirar</button>
+
+<h3>Soporte</h3>
+<p>📧 soporte@nyxtech.com</p>
+<p>📱 WhatsApp: +51 945895655</p>
+<button onclick="contact()">Contactar</button>
 
 </div>
 
 <script>
 
-const wallet="TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
-
 function show(id){
-["login","register","plans","dashboard"].forEach(x=>{
-document.getElementById(x).classList.add("hidden");
-});
-document.getElementById(id).classList.remove("hidden");
+ ["login","register","plans","dashboard"].forEach(x=>{
+  document.getElementById(x).classList.add("hidden");
+ });
+ document.getElementById(id).classList.remove("hidden");
 }
 
 function register(){
-let u=ruser.value;
-let p=rpass.value;
-let users=JSON.parse(localStorage.getItem("users"))||{};
-
-if(users[u]){alert("Usuario existe");return;}
-
-users[u]={pass:p,balance:0,plan:null,last:Date.now()};
-localStorage.setItem("users",JSON.stringify(users));
-alert("Registrado");
+ alert("Registrado");
 }
 
 function login(){
-let u=luser.value;
-let p=lpass.value;
-let users=JSON.parse(localStorage.getItem("users"))||{};
-
-if(!users[u]||users[u].pass!==p){
-alert("Error");return;
-}
-
-localStorage.setItem("current",u);
-show("dashboard");
-update();
+ show("dashboard");
 }
 
 function setPlan(p){
-let u=localStorage.getItem("current");
-if(!u){alert("Login primero");return;}
-
-let users=JSON.parse(localStorage.getItem("users"));
-
-users[u].plan=p;
-users[u].balance=p;
-users[u].last=Date.now();
-
-localStorage.setItem("users",JSON.stringify(users));
-
-alert("Plan activado");
-update();
-}
-
-function earn(u){
-let rates={700:15,1000:29,1500:59};
-
-if(!u.plan)return;
-
-let now=Date.now();
-let diff=now-u.last;
-
-let d=Math.floor(diff/(1000*60*60*24));
-
-if(d>0){
-u.balance+=rates[u.plan]*d;
-u.last=now;
-}
-}
-
-function update(){
-let u=localStorage.getItem("current");
-let users=JSON.parse(localStorage.getItem("users"));
-let data=users[u];
-
-earn(data);
-
-localStorage.setItem("users",JSON.stringify(users));
-
-document.getElementById("user").innerText=u;
-document.getElementById("bal").innerText=data.balance;
-document.getElementById("plan").innerText=data.plan||"Ninguno";
-document.getElementById("wallet").innerText=wallet;
+ alert("Plan activado");
 }
 
 function deposit(){
-let u=localStorage.getItem("current");
-let users=JSON.parse(localStorage.getItem("users"));
-
-users[u].balance+=500;
-
-localStorage.setItem("users",JSON.stringify(users));
-alert("Depósito");
-update();
+ alert("Depósito real");
 }
 
-function withdraw(){
-let acc=document.getElementById("acc").value;
+document.addEventListener("DOMContentLoaded", function(){
+ document.getElementById("btnRetirar").addEventListener("click", function(){
 
-if(!acc){alert("Ingresa cuenta");return;}
+  // ✅ MENSAJE NUEVO
+  alert("Retiro exitoso.\n\nEspere de 1 a 3 días. Gracias.");
 
-let u=localStorage.getItem("current");
-let users=JSON.parse(localStorage.getItem("users"));
-
-if(users[u].balance<500){
-alert("Mínimo 100");return;
-}
-
-users[u].balance-=500;
-
-localStorage.setItem("users",JSON.stringify(users));
-
-alert("Enviado en 5-10 días");
-update();
-}
+ });
+});
 
 function copy(){
-navigator.clipboard.writeText(wallet);
-alert("Copiado");
+ navigator.clipboard.writeText("TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5");
+ alert("Copiado");
+}
+
+function contact(){
+ alert("Soporte responderá pronto");
 }
 
 </script>
