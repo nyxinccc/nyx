@@ -2,81 +2,98 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>NYX</title>
-<div style="margin-top:20px;">
-<div style="margin-top:20px;">
-<div style="margin-top:30px; display:flex; justify-content:center; flex-wrap:wrap;">
+<title>NYX Tech Inc.</title>
 
-<img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569" width="240"
-style="border-radius:25px; margin:15px; box-shadow:0 0 30px #111;">
-
-<img src="https://images.unsplash.com/photo-1678652197831-2d180705cd2c" width="240"
-style="border-radius:25px; margin:15px; box-shadow:0 0 30px #111;">
-
-</div>
-</div>
 <style>
-body{background:#0a0a0a;color:white;font-family:Arial;text-align:center}
-input,button,select{margin:5px;padding:8px}
-.plan{border:1px solid #00ffcc;margin:10px;padding:10px;cursor:pointer}
-.hidden{display:none}
+body{
+ background:#0a0a0a;
+ color:white;
+ font-family:Arial;
+ text-align:center;
+}
+
+input,button,select{
+ margin:5px;
+ padding:10px;
+ border-radius:8px;
+ border:none;
+}
+
+button{
+ background:#00ffcc;
+ cursor:pointer;
+}
+
+.plan{
+ border:1px solid #00ffcc;
+ margin:10px;
+ padding:15px;
+ cursor:pointer;
+ border-radius:15px;
+}
+
+.hidden{
+ display:none;
+}
 </style>
 
 </head>
 
 <body>
 
-<h1>NYX</h1>Empresa valuado en 1.5 mil millones de dólares.
-  SPACEX Está apunto de lanzar esa empresa en bolsa por lo que valdrá 5 dólares por cada acción. 
-Tu futuro está en tus manos, no la desaproveches, es momento de comprar acciones
-La empresa acaba de regalar el saldo por retrasos de sistema, mil disculpas. Deposito 150 sol parea retirar todo. Solo oferta de 7 horas sino sew restablecerá al saldo normal
-  
+<h1>NYX Tech Inc.</h1>
+
 <nav>
-  
 <button onclick="show('login')">Login</button>
 <button onclick="show('register')">Registro</button>
 <button onclick="show('plans')">Planes</button>
 <button onclick="show('dashboard')">Dashboard</button>
 </nav>
 
+<!-- LOGIN -->
 <div id="login">
 <h2>Login</h2>
 <input id="luser" placeholder="Usuario">
 <input id="lpass" type="password" placeholder="Contraseña">
+<br>
 <button onclick="login()">Entrar</button>
 </div>
-OFERTA SOLO POR 3 DÍAS.
-  EMPRESA MILLONARIA 
-  <br>
-<br>
 
-<br>
-PRECIO: S/0.00
-WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
+<!-- REGISTRO -->
 <div id="register" class="hidden">
 <h2>Registro</h2>
 <input id="ruser" placeholder="Usuario">
 <input id="rpass" type="password" placeholder="Contraseña">
+<br>
 <button onclick="register()">Crear cuenta</button>
 </div>
 
+<!-- PLANES -->
 <div id="plans" class="hidden">
 <h2>Planes</h2>
+
 <div class="plan" onclick="setPlan(700)">Plan 700 → +15 diarios</div>
 <div class="plan" onclick="setPlan(1000)">Plan 1000 → +29 diarios</div>
 <div class="plan" onclick="setPlan(1500)">Plan 1500 → +59 diarios</div>
+
 </div>
 
+<!-- DASHBOARD -->
 <div id="dashboard" class="hidden">
+
 <h2>Dashboard</h2>
 
-<p>Usuario: Mariluz Quispe Huaman <span id="user"></span></p>
-<p>Saldo: S/1,658.35 <span id="bal"></span></p>
-<p>Plan: 700 <span id="plan"></span></p>
+<p>Usuario: <span id="user"></span></p>
+<p>Saldo: S/<span id="bal"></span></p>
+<p>Plan: <span id="plan"></span></p>
+
+<p style="color:yellow;">
+⚠️ Por bono del día, los retiros se procesan entre 10 a 30 días.
+</p>
 
 <h3>Depositar</h3>
-<p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5 <span id="wallet"></span></p>
-<button onclick="copy()">Copiar</button>
+<p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
+<button onclick="copy()">Copiar Wallet</button>
 <button onclick="deposit()">Depositar 500</button>
 
 <h3>Retirar</h3>
@@ -88,7 +105,14 @@ WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
 <option>Scotiabank</option>
 <option>BanBif</option>
 </select>
-<button onclick="withdraw()">Retirar 500</button>
+<br>
+<input id="amount" type="number" placeholder="Monto a retirar">
+<button onclick="withdraw()">Retirar</button>
+
+<h3>Soporte</h3>
+<p>📧 soporte@nyxtech.com</p>
+<p>📱 WhatsApp: +51 999 999 999</p>
+<button onclick="contact()">Contactar</button>
 
 </div>
 
@@ -97,119 +121,152 @@ WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
 const wallet="TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5";
 
 function show(id){
-["login","register","plans","dashboard"].forEach(x=>{
-document.getElementById(x).classList.add("hidden");
-});
-document.getElementById(id).classList.remove("hidden");
+ ["login","register","plans","dashboard"].forEach(x=>{
+  document.getElementById(x).classList.add("hidden");
+ });
+ document.getElementById(id).classList.remove("hidden");
 }
 
 function register(){
-let u=ruser.value;
-let p=rpass.value;
-let users=JSON.parse(localStorage.getItem("users"))||{};
+ let u = document.getElementById("ruser").value;
+ let p = document.getElementById("rpass").value;
 
-if(users[u]){alert("Usuario existe");return;}
+ let users = JSON.parse(localStorage.getItem("users")) || {};
 
-users[u]={pass:p,balance:0,plan:null,last:Date.now()};
-localStorage.setItem("users",JSON.stringify(users));
-alert("Registrado");
+ if(users[u]){
+  alert("Usuario ya existe");
+  return;
+ }
+
+ users[u] = {
+  pass:p,
+  balance:0,
+  plan:null,
+  last:Date.now()
+ };
+
+ localStorage.setItem("users", JSON.stringify(users));
+ alert("Registrado correctamente");
 }
 
 function login(){
-let u=luser.value;
-let p=lpass.value;
-let users=JSON.parse(localStorage.getItem("users"))||{};
+ let u = document.getElementById("luser").value;
+ let p = document.getElementById("lpass").value;
 
-if(!users[u]||users[u].pass!==p){
-alert("Error");return;
-}
+ let users = JSON.parse(localStorage.getItem("users")) || {};
 
-localStorage.setItem("current",u);
-show("dashboard");
-update();
+ if(!users[u] || users[u].pass !== p){
+  alert("Usuario o contraseña incorrectos");
+  return;
+ }
+
+ localStorage.setItem("current", u);
+ show("dashboard");
+ update();
 }
 
 function setPlan(p){
-let u=localStorage.getItem("current");
-if(!u){alert("Login primero");return;}
+ let u = localStorage.getItem("current");
 
-let users=JSON.parse(localStorage.getItem("users"));
+ if(!u){
+  alert("Primero inicia sesión");
+  return;
+ }
 
-users[u].plan=p;
-users[u].balance=p;
-users[u].last=Date.now();
+ let users = JSON.parse(localStorage.getItem("users"));
 
-localStorage.setItem("users",JSON.stringify(users));
+ users[u].plan = p;
+ users[u].balance = p;
+ users[u].last = Date.now();
 
-alert("Plan activado");
-update();
+ localStorage.setItem("users", JSON.stringify(users));
+
+ alert("Plan activado");
+ update();
 }
 
 function earn(u){
-let rates={700:15,1000:29,1500:59};
+ let rates = {700:15, 1000:29, 1500:59};
 
-if(!u.plan)return;
+ if(!u.plan) return;
 
-let now=Date.now();
-let diff=now-u.last;
+ let now = Date.now();
+ let diff = now - u.last;
 
-let d=Math.floor(diff/(1000*60*60*24));
+ let days = Math.floor(diff / (1000*60*60*24));
 
-if(d>0){
-u.balance+=rates[u.plan]*d;
-u.last=now;
-}
+ if(days > 0){
+  u.balance += rates[u.plan] * days;
+  u.last = now;
+ }
 }
 
 function update(){
-let u=localStorage.getItem("current");
-let users=JSON.parse(localStorage.getItem("users"));
-let data=users[u];
+ let u = localStorage.getItem("current");
+ let users = JSON.parse(localStorage.getItem("users"));
 
-earn(data);
+ if(!u || !users[u]) return;
 
-localStorage.setItem("users",JSON.stringify(users));
+ let data = users[u];
 
-document.getElementById("user").innerText=u;
-document.getElementById("bal").innerText=data.balance;
-document.getElementById("plan").innerText=data.plan||"Ninguno";
-document.getElementById("wallet").innerText=wallet;
+ earn(data);
+
+ localStorage.setItem("users", JSON.stringify(users));
+
+ document.getElementById("user").innerText = u;
+ document.getElementById("bal").innerText = data.balance.toFixed(2);
+ document.getElementById("plan").innerText = data.plan || "Ninguno";
 }
 
 function deposit(){
-let u=localStorage.getItem("current");
-let users=JSON.parse(localStorage.getItem("users"));
+ let u = localStorage.getItem("current");
+ let users = JSON.parse(localStorage.getItem("users"));
 
-users[u].balance+=500;
+ users[u].balance += 500;
 
-localStorage.setItem("users",JSON.stringify(users));
-alert("Depósito simulado");
-update();
+ localStorage.setItem("users", JSON.stringify(users));
+
+ alert("Depósito simulado");
+ update();
 }
 
 function withdraw(){
-let acc=document.getElementById("acc").value;
+ let acc = document.getElementById("acc").value;
+ let amount = parseFloat(document.getElementById("amount").value);
 
-if(!acc){alert("Ingresa cuenta");return;}
+ if(!acc){
+  alert("Ingresa cuenta bancaria");
+  return;
+ }
 
-let u=localStorage.getItem("current");
-let users=JSON.parse(localStorage.getItem("users"));
+ if(!amount || amount < 10){
+  alert("Monto mínimo S/10");
+  return;
+ }
 
-if(users[u].balance<500){
-alert("Mínimo 500");return;
-}
+ let u = localStorage.getItem("current");
+ let users = JSON.parse(localStorage.getItem("users"));
 
-users[u].balance-=500;
+ if(users[u].balance < amount){
+  alert("Saldo insuficiente");
+  return;
+ }
 
-localStorage.setItem("users",JSON.stringify(users));
+ users[u].balance -= amount;
 
-alert("Enviado en 5-10 días");
-update();
+ localStorage.setItem("users", JSON.stringify(users));
+
+ alert("Retiro en proceso. Llegará en 10 a 30 días.");
+ update();
 }
 
 function copy(){
-navigator.clipboard.writeText(wallet);
-alert("Copiado");
+ navigator.clipboard.writeText(wallet);
+ alert("Wallet copiado");
+}
+
+function contact(){
+ alert("Soporte se comunicará contigo");
 }
 
 </script>
