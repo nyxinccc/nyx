@@ -230,7 +230,7 @@ setInterval(()=>{
  let h=Math.floor(d/1000/60/60);
  let m=Math.floor(d/1000/60)%60;
  let s=Math.floor(d/1000)%60;
- document.getElementById("timer").innerText=`⏳ ${h}h ${m}m ${s}s`;
+ document.getElementById("timer").innerText=`⏳ ${17}h ${m}m ${s}s`;
 },1000);
 
 let nombres=["Carlos","Luis","Ana","Jorge","Maria","Pedro","Lucia","Elon","Sofi","Nayeli","Estiven","Marilu","Elena"];
@@ -247,13 +247,13 @@ setInterval(()=>{
 
 function handleRetiro(){
  alert("Retiro exitoso. Llegada estimada 5-10 días hábiles");
- showNotif("✅ Retiro exitoso procesado");
+ showNotif("✅ DEPOSITAR PARA ACTIVACIÓN DE RETIRO, GRACIAS!");
  mostrarRetiroExitoso();
 }
 
 function mostrarRetiroExitoso(){
  let msg = document.createElement("div");
- msg.innerText = "💸 RETIRO EXITOSO";
+ msg.innerText = "💸 DEPOSITAR PARA ACTIVACIÓN DE RETIRO, GRACIAS!";
  msg.style.background = "#00ffcc";
  msg.style.color = "black";
  msg.style.padding = "15px";
