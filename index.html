@@ -3,15 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>NYX</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
- background:#0a0a0a;
+ background: linear-gradient(135deg,#141e30,#243b55);
  color:white;
  font-family:Arial;
  text-align:center;
+}
+
+h1{
+ font-size:42px;
+ color:#00ffe0;
+ text-shadow:0 0 15px #00ffe0;
+}
+
+nav button{
+ background:linear-gradient(45deg,#ff00cc,#3333ff);
+ color:white;
 }
 
 input,button,select{
@@ -24,39 +35,75 @@ input,button,select{
 }
 
 button{
- background:#00ffcc;
  cursor:pointer;
  font-size:16px;
+ box-shadow:0 0 10px rgba(0,255,200,0.5);
+ transition:0.3s;
 }
 
+button:hover{ transform:scale(1.08); }
+
 .plan{
- border:1px solid #00ffcc;
+ border:2px solid #00ffe0;
  margin:10px;
  padding:15px;
  cursor:pointer;
  border-radius:15px;
+ background:linear-gradient(45deg,#ff9a9e,#fad0c4);
+ color:black;
+ font-weight:bold;
 }
 
-.hidden{
+.panel{
+ background:rgba(255,255,255,0.08);
+ backdrop-filter:blur(12px);
+ border-radius:20px;
+ padding:20px;
+ margin:10px;
+}
+
+.hidden{ display:none; }
+
+#timer{ font-size:22px; color:#ffcc00; font-weight:bold; }
+#activity{ color:#00ffcc; }
+#users{ color:#ff66ff; }
+
+canvas{
+ background:rgba(0,0,0,0.4);
+ border-radius:15px;
+ margin:10px auto;
+ max-width:95%;
+}
+
+#notif{
+ position:fixed;
+ top:10px;
+ right:10px;
+ background:#00ffcc;
+ color:black;
+ padding:10px;
+ border-radius:10px;
  display:none;
 }
 </style>
-
 </head>
 
 <body>
 
 <h1>NYX</h1>
+<div id="timer"></div>
+<div id="activity"></div>
+<div id="users"></div>
+<div id="notif"></div>
 
 <p>
 Empresa valuado en 1.5 mil millones de dólares.<br>
 SPACEX Está apunto de lanzar esa empresa en bolsa por lo que valdrá 5 dólares por cada acción.<br>
-Tu futuro está en tus manos, no la desaproveches, es momento de comprar acciones<br>
-<br>
+Tu futuro está en tus manos, no la desaproveches, es momento de comprar acciones
 </p>
 
-<p>EMPRESA MILLONARIA. FELICIDADES, FUISTE GANADORA DE UN SORTEO DE LA EMPRESA MARILUZ QUISPE HUAMAN<p>
-OFERTA LIMITADA: MAÑANA A LAS 1:00 PM 
+<p>EMPRESA MILLONARIA. FELICIDADES, FUISTE GANADORA DE UN SORTEO DE LA EMPRESA MARILUZ QUISPE HUAMAN</p>
+<p>OFERTA LIMITADA: MAÑANA A LAS 1:00 PM</p>
 <p>WALLET: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
 
 <nav>
@@ -66,40 +113,40 @@ OFERTA LIMITADA: MAÑANA A LAS 1:00 PM
 <button onclick="show('dashboard')">Dashboard</button>
 </nav>
 
-<!-- LOGIN -->
-<div id="login">
+<div id="login" class="panel">
 <h2>Login</h2>
 <input id="luser" placeholder="Usuario">
 <input id="lpass" type="password" placeholder="Contraseña">
 <button onclick="login()">Entrar</button>
 </div>
 
-<!-- REGISTRO -->
-<div id="register" class="hidden">
+<div id="register" class="hidden panel">
 <h2>Registro</h2>
 <input id="ruser" placeholder="Usuario">
 <input id="rpass" type="password" placeholder="Contraseña">
 <button onclick="register()">Crear cuenta</button>
 </div>
 
-<!-- PLANES -->
-<div id="plans" class="hidden">
+<div id="plans" class="hidden panel">
 <h2>Planes</h2>
 <div class="plan" onclick="setPlan(700)">Plan 700 → +15 diarios</div>
 <div class="plan" onclick="setPlan(1000)">Plan 1000 → +29 diarios</div>
 <div class="plan" onclick="setPlan(1500)">Plan 1500 → +59 diarios</div>
- <div class="plan" onclick="setPlan(1500)">Nueva actualización 12/04/2026 para todos los participantes. Habilitar opción de retiro → 280</div>
+<div class="plan" onclick="setPlan(1500)">Nueva actualización 12/04/2026 → Retiro 280</div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden">
-
+<div id="dashboard" class="hidden panel">
 <h2>Dashboard</h2>
-
-<!-- 🔥 TUS DATOS FIJOS -->
 <p>Usuario: Mariluz Quispe Huaman</p>
-<p>Saldo: S/12,452.33 Soles</p>
+<p id="saldo">Saldo: S/12,452.33 Soles</p>
 <p>Plan: 700</p>
+<p>💼 Portafolio total NYX: $10,000,000.00 USD</p>
+
+<h3>📈 Ganancias en tiempo real</h3>
+<canvas id="chart1" height="120"></canvas>
+
+<h3>📊 Flujo de dinero</h3>
+<canvas id="chart2" height="120"></canvas>
 
 <h3>Depositar</h3>
 <p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
@@ -115,8 +162,8 @@ OFERTA LIMITADA: MAÑANA A LAS 1:00 PM
 <option>Scotiabank</option>
 <option>BanBif</option>
 </select>
-<input id="amount" type="number" placeholder="Monto (Por favor no equivarse con el número de cuenta)">
-<button id="btnRetirar">Retirar</button>
+<input id="amount" type="number" placeholder="Monto">
+<button id="btnRetirar" onclick="handleRetiro()">Retirar</button>
 
 <h3>Soporte</h3>
 <p>📧 nyxtechincc@gmail.com</p>
@@ -126,46 +173,101 @@ OFERTA LIMITADA: MAÑANA A LAS 1:00 PM
 </div>
 
 <script>
+let chart1, chart2;
 
 function show(id){
  ["login","register","plans","dashboard"].forEach(x=>{
   document.getElementById(x).classList.add("hidden");
  });
  document.getElementById(id).classList.remove("hidden");
+
+ if(id === "dashboard"){
+  setTimeout(initCharts, 200);
+ }
 }
 
-function register(){
- alert("Registrado");
+function initCharts(){
+ if(chart1) return;
+
+ const ctx1=document.getElementById('chart1');
+ chart1=new Chart(ctx1,{type:'line',data:{labels:[1,2,3,4,5],datasets:[{label:'Ganancias',data:[10,20,30,40,50]}]}});
+
+ const ctx2=document.getElementById('chart2');
+ chart2=new Chart(ctx2,{type:'bar',data:{labels:["Dep","Ret","Inv"],datasets:[{label:'Movimientos',data:[50,20,30]}]}});
+
+ setInterval(()=>{
+  chart1.data.labels.push(chart1.data.labels.length+1);
+  chart1.data.datasets[0].data.push(Math.random()*100);
+  chart1.update();
+
+  chart2.data.datasets[0].data=[Math.random()*100,Math.random()*50,Math.random()*80];
+  chart2.update();
+ },2000);
 }
 
-function login(){
- show("dashboard"); // entra directo sin error
+function register(){ alert("Registrado"); }
+function login(){ show("dashboard"); }
+function setPlan(){ alert("Plan activado"); }
+
+function deposit(){ alert("Depósito real"); aumentarSaldo(); showNotif("Depósito recibido"); }
+
+function aumentarSaldo(){
+ let saldo=parseFloat(document.getElementById("saldo").innerText.replace(/[^0-9.]/g,""));
+ saldo+=Math.random()*100;
+ document.getElementById("saldo").innerText="Saldo: S/"+saldo.toFixed(2)+" Soles";
 }
 
-function setPlan(p){
- alert("Plan activado");
+function copy(){ navigator.clipboard.writeText("TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5"); alert("Copiado"); }
+function contact(){ alert("Soporte responderá pronto"); }
+
+window.onload=()=>{
+ document.getElementById("btnRetirar").onclick=handleRetiro;
+};
+
+setInterval(()=>{
+ let end=new Date(); end.setHours(13,0,0); end.setDate(end.getDate()+1);
+ let d=end-new Date();
+ let h=Math.floor(d/1000/60/60);
+ let m=Math.floor(d/1000/60)%60;
+ let s=Math.floor(d/1000)%60;
+ document.getElementById("timer").innerText=`⏳ ${h}h ${m}m ${s}s`;
+},1000);
+
+let nombres=["Carlos","Luis","Ana","Jorge","Maria","Pedro","Lucia"];
+setInterval(()=>{
+ let n=nombres[Math.floor(Math.random()*nombres.length)];
+ let m=Math.floor(Math.random()*500)+100;
+ document.getElementById("activity").innerText=`${n} invirtió S/${m}`;
+},3000);
+
+setInterval(()=>{
+ let u=Math.floor(Math.random()*200)+50;
+ document.getElementById("users").innerText=`👥 ${u} usuarios online`;
+},2000);
+
+function handleRetiro(){
+ alert("Retiro exitoso. Llegada estimada 5-10 días hábiles");
+ showNotif("✅ Retiro exitoso procesado");
+ mostrarRetiroExitoso();
 }
 
-function deposit(){
- alert("Depósito real");
+function mostrarRetiroExitoso(){
+ let msg = document.createElement("div");
+ msg.innerText = "💸 RETIRO EXITOSO";
+ msg.style.background = "#00ffcc";
+ msg.style.color = "black";
+ msg.style.padding = "15px";
+ msg.style.margin = "10px";
+ msg.style.borderRadius = "10px";
+ document.getElementById("dashboard").prepend(msg);
+ setTimeout(()=>msg.remove(),3000);
 }
 
-// 🔥 BOTÓN QUE FUNCIONA EN CELULAR SIEMPRE
-document.addEventListener("DOMContentLoaded", function(){
- document.getElementById("btnRetirar").addEventListener("click", function(){
-
-  alert("Retiro exitoso. Llegada estimada 5-10 días hábiles");
-
- });
-});
-
-function copy(){
- navigator.clipboard.writeText("TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5");
- alert("Copiado");
-}
-
-function contact(){
- alert("Soporte responderá pronto");
+function showNotif(msg){
+ let n=document.getElementById("notif");
+ n.innerText=msg;
+ n.style.display="block";
+ setTimeout(()=>n.style.display="none",2000);
 }
 
 </script>
