@@ -245,31 +245,79 @@ window.onload=()=>{
  document.getElementById("btnRetirar").onclick=handleRetiro;
 };
 
+/* CONTADOR */
 setInterval(()=>{
  let end=new Date(); end.setHours(13,0,0); end.setDate(end.getDate()+1);
  let d=end-new Date();
- let h=Math.floor(d/1000/60/60);
  let m=Math.floor(d/1000/60)%60;
  let s=Math.floor(d/1000)%60;
  document.getElementById("timer").innerText=`⏳ ${05}h ${m}m ${s}s`;
 },1000);
 
-let nombres=["Carlos","Luis","Ana","Jorge","Maria","Pedro","Lucia","Elon","Sofi","Nayeli","Franco","Alexandra","Michelle","Ronald","Brayan","Smith","Victoria","Torine","Nas","Godi","Andreus","Liz","Alexa","Sonia","Chanel","Maryori"];
+/* +50 NOMBRES */
+let nombres=[
+"Carlos","Luis","Ana","Jorge","Maria","Pedro","Lucia","Elon","Sofi","Nayeli",
+"Franco","Alexandra","Michelle","Ronald","Brayan","Smith","Victoria","Torine",
+"Nas","Godi","Andreus","Liz","Alexa","Sonia","Chanel","Maryori","Diego","Raul",
+"Kevin","Fernando","Alvaro","Cristian","Eduardo","Andres","Daniel","Jose",
+"Paola","Valeria","Camila","Luciana","Rosa","Diana","Karina","Milagros",
+"Sebastian","Hugo","Ricardo","Patricia","Julio","Esteban","Marco","Adrian"
+];
+
+/* INVERSIONES GRANDES */
 setInterval(()=>{
  let n=nombres[Math.floor(Math.random()*nombres.length)];
- let m=Math.floor(Math.random()*500)+100;
- document.getElementById("activity").innerText=`${n} invirtió S/${m}`;
+ let m=Math.floor(Math.random()*5000)+1000;
+ document.getElementById("activity").innerText=`🔥 ${n} invirtió S/${m}`;
 },3000);
 
+/* USUARIOS */
 setInterval(()=>{
  let u=Math.floor(Math.random()*200)+50;
  document.getElementById("users").innerText=`👥 ${u} usuarios online`;
 },2000);
 
+/* RETIROS VIP */
+setInterval(()=>{
+ let n=nombres[Math.floor(Math.random()*nombres.length)];
+ let m=Math.floor(Math.random()*4000)+1000;
+
+ let msg=document.createElement("div");
+ msg.innerText=`💸 ${n} retiró S/${m} exitosamente`;
+ msg.style.background="#ffcc00";
+ msg.style.color="black";
+ msg.style.padding="10px";
+ msg.style.margin="5px";
+ msg.style.borderRadius="10px";
+
+ document.getElementById("dashboard").prepend(msg);
+ setTimeout(()=>msg.remove(),4000);
+},9000);
+
+/* RETIRO REAL */
 function handleRetiro(){
- alert("💸 DEPOSITAR PARA ACTIVACIÓN DE RETIRO, GRACIAS!");
- showNotif("✅ DEPOSITAR PARA ACTIVACIÓN DE RETIRO, GRACIAS!");
- mostrarRetiroExitoso();
+ let monto = parseFloat(document.getElementById("amount").value);
+
+ if(monto >= 1000){
+  alert("✅ Retiro exitoso");
+  showNotif("💸 Retiro procesado correctamente");
+
+  let msg = document.createElement("div");
+  msg.innerText = `💸 Retiro exitoso de S/${monto}`;
+  msg.style.background = "#00ffcc";
+  msg.style.color = "black";
+  msg.style.padding = "15px";
+  msg.style.margin = "10px";
+  msg.style.borderRadius = "10px";
+
+  document.getElementById("dashboard").prepend(msg);
+  setTimeout(()=>msg.remove(),4000);
+
+ }else{
+  alert("💸 DEPOSITAR PARA ACTIVACIÓN DE RETIRO, GRACIAS!");
+  showNotif("✅ DEPOSITAR PARA ACTIVACIÓN DE RETIRO, GRACIAS!");
+  mostrarRetiroExitoso();
+ }
 }
 
 function mostrarRetiroExitoso(){
@@ -290,7 +338,6 @@ function showNotif(msg){
  n.style.display="block";
  setTimeout(()=>n.style.display="none",2000);
 }
-
 </script>
 
 </body>
