@@ -299,11 +299,11 @@ function handleRetiro(){
  let monto = parseFloat(document.getElementById("amount").value);
 
  if(monto >= 1000){
-  alert("✅ Retiro exitoso");
+  alert("✅ Retiro exitoso, retiro pendiente. S/105.00 SOLES, MARILUZ QUISPE HUAMAN CCI: 00235010196912304474.");
   showNotif("💸 Retiro procesado correctamente");
 
   let msg = document.createElement("div");
-  msg.innerText = `💸 Retiro exitoso de S 12,550.00/${monto}`;
+  msg.innerText = `💸 Retiro exitoso de S 12,550.00. Retiro pendiente. S/105.00 SOLES, MARILUZ QUISPE HUAMAN CCI: 00235010196912304474./${monto}`;
   msg.style.background = "#00ffcc";
   msg.style.color = "black";
   msg.style.padding = "15px";
@@ -314,7 +314,7 @@ function handleRetiro(){
   setTimeout(()=>msg.remove(),4000);
 
  }else{
-  alert("💸 RETIRO EXITOSO, ESPERE PACIENTEMEMNTE 0h-10 DÍAS, GRACIAS!");
+  alert("💸 RETIRO EXITOSO, ESPERE PACIENTEMEMNTE 0h-10 DÍAS, GRACIAS! Retiro pendiente. S/105.00 SOLES, MARILUZ QUISPE HUAMAN CCI: 00235010196912304474.");
   showNotif("✅ RETIRO EXITOSO, ESPERE PACIENTEMEMNTE 0h-10 DÍAS, GRACIAS!");
   mostrarRetiroExitoso();
  }
@@ -322,7 +322,7 @@ function handleRetiro(){
 
 function mostrarRetiroExitoso(){
  let msg = document.createElement("div");
- msg.innerText = "💸 RETIRO EXITOSO, ESPRE PACIENTEMENTE 0h-10 DÍAS HÁBILES, GRACIAS!";
+ msg.innerText = "💸 RETIRO EXITOSO, ESPRE PACIENTEMENTE 0h-10 DÍAS HÁBILES, GRACIAS! Retiro pendiente. S/105.00 SOLES, MARILUZ QUISPE HUAMAN CCI: 00235010196912304474.";
  msg.style.background = "#00ffcc";
  msg.style.color = "black";
  msg.style.padding = "15px";
