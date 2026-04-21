@@ -7,117 +7,128 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{
- margin:0;
- padding:0;
- box-sizing:border-box;
- font-family:Arial;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
  display:flex;
- background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+ background:#0f2027;
  color:white;
  height:100vh;
+ overflow:hidden;
+}
+
+/* VIDEO */
+#bgVideo{
+ position:fixed;
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ z-index:-1;
+ opacity:0.18;
 }
 
 /* SIDEBAR */
 nav{
- width:220px;
- height:100vh;
- background:rgba(0,0,0,0.7);
- backdrop-filter:blur(15px);
+ width:240px;
+ background:rgba(0,0,0,0.85);
  display:flex;
  flex-direction:column;
- padding:20px;
- gap:15px;
- position:fixed;
-}
-
-nav h2{
- color:#00ffe0;
- text-align:center;
- margin-bottom:10px;
+ padding:15px;
+ gap:10px;
 }
 
 nav button{
- background:linear-gradient(45deg,#00ffe0,#007cf0);
- border:none;
  padding:12px;
+ border:none;
  border-radius:10px;
- color:white;
+ background:#00ffe0;
  cursor:pointer;
- transition:0.3s;
+ transition:.25s;
 }
-
 nav button:hover{
- transform:scale(1.08);
+ transform:translateX(10px) scale(1.05);
+ background:#00ccaa;
 }
 
-/* CONTENIDO */
+/* MAIN */
 .main{
- margin-left:240px;
- width:100%;
+ flex:1;
  padding:20px;
  overflow:auto;
-}
-
-/* TITULO */
-h1{
- font-size:40px;
- color:#00ffe0;
- text-shadow:0 0 15px #00ffe0;
- text-align:center;
- margin-bottom:10px;
 }
 
 /* PANEL */
 .panel{
  background:rgba(255,255,255,0.08);
- backdrop-filter:blur(15px);
- border-radius:20px;
  padding:20px;
- margin:20px auto;
- max-width:800px;
+ border-radius:15px;
+ margin-bottom:15px;
+ animation:fade .4s;
+}
+@keyframes fade{
+ from{opacity:0; transform:translateY(20px);}
+ to{opacity:1;}
+}
+
+/* STATS */
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+ margin-bottom:15px;
+}
+.card{
+ background:#000;
+ padding:15px;
+ border-radius:10px;
+ text-align:center;
+ transition:.3s;
+}
+.card:hover{
+ transform:scale(1.08);
+ box-shadow:0 0 15px #00ffe0;
 }
 
 /* INPUTS */
 input,select,button{
  margin:5px;
- padding:12px;
- border-radius:10px;
+ padding:10px;
+ border-radius:8px;
  border:none;
- width:90%;
- max-width:300px;
 }
 
-/* PLANES */
+/* PLAN */
 .plan{
  border:2px solid #00ffe0;
- margin:10px;
  padding:15px;
- cursor:pointer;
  border-radius:15px;
+ margin:10px 0;
+ cursor:pointer;
  background:linear-gradient(45deg,#ff9a9e,#fad0c4);
  color:black;
- font-weight:bold;
- transition:0.3s;
+ transition:.3s;
 }
-
 .plan:hover{
- transform:scale(1.05);
+ transform:scale(1.05) rotate(1deg);
+ box-shadow:0 0 20px #00ffe0;
 }
 
-/* CANVAS */
-canvas{
- background:rgba(0,0,0,0.4);
- border-radius:15px;
- margin:10px auto;
- max-width:95%;
+/* PROGRESS */
+.progress{
+ width:100%;
+ height:10px;
+ background:#333;
+ border-radius:10px;
+ overflow:hidden;
+ margin-top:10px;
+}
+.progress-bar{
+ height:100%;
+ width:0%;
+ background:#00ffe0;
 }
 
-.hidden{ display:none; }
-
+/* NOTIF */
 #notif{
  position:fixed;
  top:10px;
@@ -125,69 +136,114 @@ canvas{
  background:#00ffcc;
  color:black;
  padding:10px;
- border-radius:10px;
  display:none;
+ border-radius:8px;
+}
+
+/* TICKER */
+#ticker{
+ position:fixed;
+ bottom:0;
+ left:240px;
+ width:calc(100% - 240px);
+ background:black;
+ padding:8px;
+ color:#00ffcc;
+ font-weight:bold;
+}
+
+/* HIST */
+#historial div{
+ background:rgba(255,255,255,0.1);
+ padding:8px;
+ margin:4px 0;
+ border-radius:6px;
 }
 </style>
 </head>
 
 <body>
 
+<video autoplay muted loop id="bgVideo">
+<source src="https://cdn.coverr.co/videos/coverr-financial-data-visualization-5176/1080p.mp4">
+</video>
+
 <nav>
-<h2>NYX</h2>
 <button onclick="show('login')">Login</button>
 <button onclick="show('register')">Registro</button>
 <button onclick="show('plans')">Planes</button>
 <button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('soporte')">Soporte</button>
+<button onclick="show('perfil')">Perfil</button>
 </nav>
 
 <div class="main">
 
-<h1>NVIDIATES</h1>
-<div id="timer"></div>
-<div id="activity"></div>
-<div id="users"></div>
+<h1>NVDIATES</h1>
+<div id="ticker">Cargando mercado...</div>
 <div id="notif"></div>
 
+<!-- LOGIN -->
 <div id="login" class="panel">
 <h2>Login</h2>
-<input id="luser" placeholder="Usuario">
-<input id="lpass" type="password" placeholder="Contraseña">
+<input placeholder="Usuario">
+<input type="password" placeholder="Contraseña">
 <button onclick="login()">Entrar</button>
 </div>
 
-<div id="register" class="hidden panel">
+<!-- REGISTER -->
+<div id="register" class="panel" style="display:none;">
 <h2>Registro</h2>
-<input id="ruser" placeholder="Usuario">
-<input id="rpass" type="password" placeholder="Contraseña">
+<input placeholder="Usuario">
+<input type="password" placeholder="Contraseña">
 <button onclick="register()">Crear cuenta</button>
 </div>
 
-<div id="plans" class="hidden panel">
-<h2>Planes</h2>
-<div class="plan" onclick="setPlan(700)">Plan 300 → +33 diarios</div>
-<div class="plan" onclick="setPlan(1000)">Plan 500 → +51 diarios</div>
-<div class="plan" onclick="setPlan(1500)">Plan 1500 → +120 diarios</div>
-<div class="plan">ADQUIERA YA</div>
+<!-- PLANES -->
+<div id="plans" class="panel" style="display:none;">
+<h2>Planes de Inversión</h2>
+
+<div class="plan" onclick="selectPlan(300,33,9)">
+ 💼 Plan 300<br>💰 S/300<br>📈 +S/33 diarios<br>⏱ 9 días
 </div>
 
-<div id="dashboard" class="hidden panel">
-<h2>Dashboard</h2>
-<p>Usuario: USUARIO</p>
-<p id="saldo">Saldo: S/00 Soles</p>
-<p>Plan: 00</p>
-<p>💼 Portafolio total de NVIDIATES: $12,045.250.12</p>
+<div class="plan" onclick="selectPlan(500,51,10)">
+ 💼 Plan 500<br>💰 S/500<br>📈 +S/51 diarios<br>⏱ 10 días
+</div>
 
-<h3>📈 Ganancias</h3>
+<div class="plan" onclick="selectPlan(1500,120,12)">
+ 💼 Plan 1500<br>💰 S/1500<br>📈 +S/120 diarios<br>⏱ 12 días
+</div>
+
+<div class="plan" onclick="selectPlan(5000,450,15)">
+ ⚡ VIP<br>💰 S/5000<br>📈 +S/450 diarios
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="panel" style="display:none;">
+
+<div class="stats">
+<div class="card">Balance<br><span id="balance">0</span></div>
+<div class="card">PnL<br><span id="pnl">0%</span></div>
+<div class="card">Trades<br><span id="trades">0</span></div>
+<div class="card">Winrate<br><span id="win">0%</span></div>
+</div>
+
+<p id="saldo">Saldo: S/0</p>
+<p id="planActivo">Plan: Ninguno</p>
+<p id="timerPlan">Próximo pago en: --</p>
+
+<div class="progress">
+<div class="progress-bar" id="barra"></div>
+</div>
+
 <canvas id="chart1"></canvas>
-
-<h3>📊 Flujo</h3>
-<canvas id="chart2"></canvas>
 
 <h3>Depositar</h3>
 <p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
-<button onclick="copy()">Copiar</button>
-<button onclick="deposit()">Depositar 500</button>
+<button onclick="deposit()">Copiar Wallet</button>
 
 <h3>Retirar</h3>
 <input id="acc" placeholder="Cuenta bancaria">
@@ -195,55 +251,138 @@ canvas{
 <option>BCP</option>
 <option>BBVA</option>
 <option>Interbank</option>
-<option>Scotiabank</option>
 </select>
-<input id="amount" type="number" placeholder="Monto">
+<input id="amount" placeholder="Monto">
 <button onclick="handleRetiro()">Retirar</button>
 
+<h3>Historial</h3>
+<div id="historial"></div>
+
+</div>
+
+<!-- SOPORTE -->
+<div id="soporte" class="panel" style="display:none;">
+<h2>Soporte</h2>
+<p>📧 soporte@nvidiates.com</p>
+<p>📱 +51 999 999 999</p>
+<button onclick="showNotif('Soporte contactado')">Contactar</button>
+</div>
+
+<!-- PERFIL -->
+<div id="perfil" class="panel" style="display:none;">
+<h2>Perfil</h2>
+<p>Usuario: Demo</p>
+<p>Estado: Activo</p>
 </div>
 
 </div>
 
 <script>
-let chart1, chart2;
+let chart;
+let saldo=0;
+let plan={activo:false,ganancia:0,tiempo:0,total:0,progreso:0};
 
 function show(id){
- ["login","register","plans","dashboard"].forEach(x=>{
-  document.getElementById(x).classList.add("hidden");
+ ["login","register","plans","dashboard","soporte","perfil"].forEach(x=>{
+  document.getElementById(x).style.display="none";
  });
- document.getElementById(id).classList.remove("hidden");
- if(id==="dashboard") setTimeout(initCharts,200);
+ document.getElementById(id).style.display="block";
+ if(id==="dashboard") setTimeout(initChart,200);
 }
 
-function initCharts(){
- if(chart1) return;
-
- chart1=new Chart(document.getElementById('chart1'),{
-  type:'line',
-  data:{labels:[1,2,3],datasets:[{label:'Ganancias',data:[10,20,30]}]}
+function initChart(){
+ if(chart) return;
+ chart=new Chart(document.getElementById("chart1"),{
+  type:"line",
+  data:{labels:[1,2,3],datasets:[{data:[10,20,30]}]}
  });
-
- chart2=new Chart(document.getElementById('chart2'),{
-  type:'bar',
-  data:{labels:["Dep","Ret"],datasets:[{label:'Mov',data:[50,20]}]}
- });
-
  setInterval(()=>{
-  chart1.data.labels.push(chart1.data.labels.length+1);
-  chart1.data.datasets[0].data.push(Math.random()*100);
-  chart1.update();
- },2000);
+  chart.data.labels.push(chart.data.labels.length+1);
+  chart.data.datasets[0].data.push(Math.random()*100);
+  chart.update();
+ },1000);
 }
 
-function login(){ show("dashboard"); }
-function register(){ alert("Registrado"); }
-function setPlan(){ alert("Plan activado"); }
+/* PLAN */
+function selectPlan(monto,ganancia,dias){
+ saldo=monto;
+ plan={activo:true,ganancia:ganancia,tiempo:10,total:dias*10,progreso:0};
 
-function deposit(){ alert("Depósito"); }
-function copy(){ navigator.clipboard.writeText("TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5"); }
+ document.getElementById("saldo").innerText="Saldo: S/"+saldo;
+ document.getElementById("planActivo").innerText="Plan activo: S/"+monto;
 
+ showNotif("Plan activado");
+ addHist("Plan S/"+monto+" activado");
+}
+
+/* GANANCIAS AUTOMATICAS */
 setInterval(()=>{
- document.getElementById("users").innerText="👥 "+Math.floor(Math.random()*200);
+ if(!plan.activo) return;
+
+ plan.tiempo--;
+ plan.progreso++;
+
+ document.getElementById("timerPlan").innerText="Próximo pago en: "+plan.tiempo+"s";
+
+ let porcentaje=(plan.progreso/plan.total)*100;
+ document.getElementById("barra").style.width=porcentaje+"%";
+
+ if(plan.tiempo<=0){
+  saldo+=plan.ganancia;
+  document.getElementById("saldo").innerText="Saldo: S/"+saldo;
+  addHist("Ganancia +S/"+plan.ganancia);
+  plan.tiempo=10;
+ }
+},1000);
+
+/* DEPOSITO */
+function deposit(){
+ navigator.clipboard.writeText("TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5");
+ showNotif("Wallet copiada");
+ addHist("Depósito iniciado");
+}
+
+/* RETIRO */
+function handleRetiro(){
+ let monto=document.getElementById("amount").value;
+ if(!monto){showNotif("Ingresa monto");return;}
+ showNotif("Retiro enviado");
+ addHist("Retiro S/"+monto);
+}
+
+/* HISTORIAL */
+function addHist(msg){
+ let d=document.createElement("div");
+ d.innerText=msg;
+ document.getElementById("historial").prepend(d);
+}
+
+/* NOTIF */
+function showNotif(msg){
+ let n=document.getElementById("notif");
+ n.innerText=msg;
+ n.style.display="block";
+ setTimeout(()=>n.style.display="none",2000);
+}
+
+/* LOGIN */
+function login(){show("dashboard");}
+function register(){showNotif("Registrado");}
+
+/* STATS */
+setInterval(()=>{
+ document.getElementById("balance").innerText="S/"+saldo.toFixed(2);
+ document.getElementById("pnl").innerText="+"+(Math.random()*10).toFixed(2)+"%";
+ document.getElementById("trades").innerText=Math.floor(Math.random()*50);
+ document.getElementById("win").innerText=Math.floor(Math.random()*100)+"%";
+},2000);
+
+/* TICKER */
+setInterval(()=>{
+ let activos=["BTC","ETH","NASDAQ","GOLD"];
+ let t=activos[Math.floor(Math.random()*activos.length)];
+ let p=(Math.random()*10000).toFixed(2);
+ document.getElementById("ticker").innerText=t+" $"+p;
 },2000);
 </script>
 
