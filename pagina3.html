@@ -310,7 +310,7 @@ function initChart(){
 /* PLAN */
 function selectPlan(monto,ganancia,dias){
  saldo=monto;
- plan={activo:true,ganancia:ganancia,tiempo:10,total:dias*10,progreso:0};
+ plan={activo:true,ganancia:ganancia,tiempo:3600,total:dias*3600,progreso:0};
 
  document.getElementById("saldo").innerText="Saldo: S/"+saldo;
  document.getElementById("planActivo").innerText="Plan activo: S/"+monto;
