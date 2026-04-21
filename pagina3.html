@@ -207,7 +207,7 @@ input,select,button{
  💼 Plan 300<br>💰 S/300<br>📈 +S/33 diarios<br>⏱ DIAS ILIMITADOS
 </div>
  
-<div class="plan" onclick="selectPlan(300,33,9)">
+<div class="plan" onclick="selectPlan(420,57,1)">
  💼 Plan 420<br>💰 S/420 PLAN EN OFERTA POR TIEMPO LIMITADO<br>📈 +S/57 diarios<br>⏱ 5 Horas
 </div>
  
@@ -237,7 +237,7 @@ input,select,button{
 
 <p id="saldo">Saldo: S/0</p>
 <p id="planActivo">Plan: Ninguno</p>
-<p id="timerPlan">Próximo pago en: 5 MINUTOS</p>
+<p id="timerPlan">Próximo pago en: 1h 0m 0s</p>
 
 <div class="progress">
 <div class="progress-bar" id="barra"></div>
@@ -317,51 +317,52 @@ function selectPlan(monto,ganancia,dias){
 
  showNotif("Plan activado");
  addHist("Plan S/"+monto+" activado");
+ show("dashboard");
 }
 
-/* GANANCIAS AUTOMATICAS */
+/* GANANCIAS */
 setInterval(()=>{
  if(!plan.activo) return;
 
  plan.tiempo--;
  plan.progreso++;
 
- document.getElementById("timerPlan").innerText="Próximo pago en: 10 mn "+plan.tiempo+"m";
+ let h=Math.floor(plan.tiempo/3600);
+ let m=Math.floor((plan.tiempo%3600)/60);
+ let s=plan.tiempo%60;
 
- let porcentaje=(plan.progreso/plan.total)*100;
- document.getElementById("barra").style.width=porcentaje+"%";
+ document.getElementById("timerPlan").innerText=
+ "Próximo pago en: "+h+"h "+m+"m "+s+"s";
+
+ document.getElementById("barra").style.width=(plan.progreso/plan.total*100)+"%";
 
  if(plan.tiempo<=0){
   saldo+=plan.ganancia;
   document.getElementById("saldo").innerText="Saldo: S/"+saldo;
   addHist("Ganancia +S/"+plan.ganancia);
-  plan.tiempo=10 minutos;
+  plan.tiempo=3600;
  }
 },1000);
 
-/* DEPOSITO */
 function deposit(){
  navigator.clipboard.writeText("TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5");
  showNotif("Wallet copiada");
  addHist("Depósito iniciado");
 }
 
-/* RETIRO */
 function handleRetiro(){
- let monto=document.getElementById("amount").value;
- if(!monto){showNotif("Ingresa monto");return;}
+ let m=document.getElementById("amount").value;
+ if(!m)return showNotif("Ingresa monto");
  showNotif("Retiro enviado");
- addHist("Retiro S/"+monto);
+ addHist("Retiro S/"+m);
 }
 
-/* HISTORIAL */
 function addHist(msg){
  let d=document.createElement("div");
  d.innerText=msg;
  document.getElementById("historial").prepend(d);
 }
 
-/* NOTIF */
 function showNotif(msg){
  let n=document.getElementById("notif");
  n.innerText=msg;
@@ -369,11 +370,9 @@ function showNotif(msg){
  setTimeout(()=>n.style.display="none",2000);
 }
 
-/* LOGIN */
 function login(){show("dashboard");}
 function register(){showNotif("Registrado");}
 
-/* STATS */
 setInterval(()=>{
  document.getElementById("balance").innerText="S/"+saldo.toFixed(2);
  document.getElementById("pnl").innerText="+"+(Math.random()*10).toFixed(2)+"%";
@@ -381,7 +380,6 @@ setInterval(()=>{
  document.getElementById("win").innerText=Math.floor(Math.random()*100)+"%";
 },2000);
 
-/* TICKER */
 setInterval(()=>{
  let activos=["BTC","ETH","NASDAQ","GOLD"];
  let t=activos[Math.floor(Math.random()*activos.length)];
