@@ -326,7 +326,7 @@ setInterval(()=>{
  plan.tiempo--;
  plan.progreso++;
 
- document.getElementById("timerPlan").innerText="Próximo pago en: "+plan.tiempo+"s";
+ document.getElementById("timerPlan").innerText="Próximo pago en: 10 mn "+plan.tiempo+"m";
 
  let porcentaje=(plan.progreso/plan.total)*100;
  document.getElementById("barra").style.width=porcentaje+"%";
@@ -335,7 +335,7 @@ setInterval(()=>{
   saldo+=plan.ganancia;
   document.getElementById("saldo").innerText="Saldo: S/"+saldo;
   addHist("Ganancia +S/"+plan.ganancia);
-  plan.tiempo=10;
+  plan.tiempo=10 minutos;
  }
 },1000);
 
