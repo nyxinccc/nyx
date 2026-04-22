@@ -317,11 +317,11 @@ function selectPlan(monto,ganancia,dias){
  saldo=monto;
  plan={activo:true,ganancia:ganancia,tiempo:3600,total:dias*3600,progreso:0};
 
- document.getElementById("saldo").innerText="Saldo: S/"+saldo;
- document.getElementById("planActivo").innerText="Plan activo: S/"+monto;
+ document.getElementById("saldo").innerText="Saldo: S/600"+saldo;
+ document.getElementById("planActivo").innerText="Plan activo: S/600"+monto;
 
  showNotif("Plan activado");
- addHist("Plan S/"+monto+" activado");
+ addHist("Plan S/600"+monto+" activado");
  show("dashboard");
 }
 
@@ -343,7 +343,7 @@ setInterval(()=>{
 
  if(plan.tiempo<=0){
   saldo+=plan.ganancia;
-  document.getElementById("saldo").innerText="Saldo: S/"+saldo;
+  document.getElementById("saldo").innerText="Saldo: S/600"+saldo;
   addHist("Ganancia +S/"+plan.ganancia);
   plan.tiempo=3600;
  }
