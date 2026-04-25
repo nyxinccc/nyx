@@ -220,7 +220,7 @@ input,select,button{
 <div class="card">Winrate<br><span id="win">0%</span></div>
 </div>
 
-<p id="saldo">Saldo: S/668.65</p>
+<p id="saldo">Saldo: S/0.00</p>
 <p id="invertidoFijo">Invertido: S/600.00</p>
 <p id="planActivo">Plan: 600.00</p>
 <p id="planActivo">Ganancia estimada: 222.26 soles</p>
@@ -247,7 +247,7 @@ input,select,button{
 <button onclick="handleRetiro()">Retirar</button>
 
 <h3>Historial</h3>
-<div id="historial"></div>
+<div id="historial, retiro de 688"></div>
 
 </div>
 
@@ -339,8 +339,8 @@ function deposit(){
 function handleRetiro(){
  let m=document.getElementById("amount").value;
  if(!m)return showNotif("Ingresa monto");
- showNotif("RETIRO ENVIADO, POR FAVOR ESPERE, LA REVISIÓN PODRÍA TARDAR UNOS MINUTOS");
- addHist("Retiro S/"+m);
+ showNotif("RETIRO ENVIADO");
+ addHist("Retiro S/688"+m);
 }
 
 function addHist(msg){
