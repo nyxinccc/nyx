@@ -9,256 +9,181 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
+:root{
+ --yellow:#ffd700;
+}
+
 body{
  display:flex;
- background:#0f2027;
+ background:#000;
  color:white;
  height:100vh;
- overflow:hidden;
 }
 
-#bgVideo{
- position:fixed;
- width:100%;
- height:100%;
- object-fit:cover;
- z-index:-1;
- opacity:0.18;
-}
-
+/* SIDEBAR */
 nav{
- width:240px;
- background:rgba(0,0,0,0.85);
- display:flex;
- flex-direction:column;
+ width:220px;
+ background:#000;
+ border-right:1px solid #ffd70033;
  padding:15px;
- gap:10px;
+}
+
+.logo{
+ color:#ffd700;
+ font-weight:bold;
+ margin-bottom:15px;
 }
 
 nav button{
- padding:12px;
+ width:100%;
+ margin:5px 0;
+ padding:10px;
+ background:none;
  border:none;
- border-radius:10px;
- background:#00ffe0;
+ color:#ccc;
+ text-align:left;
  cursor:pointer;
- transition:.25s;
 }
 nav button:hover{
- transform:translateX(10px) scale(1.05);
- background:#00ccaa;
+ color:#ffd700;
 }
 
+/* MAIN */
 .main{
+ flex:1;
+ display:flex;
+ flex-direction:column;
+}
+
+/* TOPBAR */
+.topbar{
+ background:#111;
+ padding:15px;
+ display:flex;
+ justify-content:space-between;
+ border-bottom:1px solid #ffd70022;
+}
+
+/* CONTENT */
+.content{
  flex:1;
  padding:20px;
  overflow:auto;
 }
 
-.panel{
- background:rgba(255,255,255,0.08);
- padding:20px;
- border-radius:15px;
- margin-bottom:15px;
- animation:fade .4s;
-}
-@keyframes fade{
- from{opacity:0; transform:translateY(20px);}
- to{opacity:1;}
-}
+.panel{display:none;}
 
-.stats{
+.grid{
  display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:10px;
- margin-bottom:15px;
+ grid-template-columns:2fr 1fr;
+ gap:15px;
 }
+
 .card{
- background:#000;
+ background:#111;
  padding:15px;
  border-radius:10px;
- text-align:center;
- transition:.3s;
-}
-.card:hover{
- transform:scale(1.08);
- box-shadow:0 0 15px #00ffe0;
+ margin-bottom:10px;
 }
 
-input,select,button{
- margin:5px;
- padding:10px;
- border-radius:8px;
+button{
+ background:#ffd700;
  border:none;
-}
-
-.plan{
- border:2px solid #00ffe0;
- padding:15px;
- border-radius:15px;
- margin:10px 0;
- cursor:pointer;
- background:linear-gradient(45deg,#ff9a9e,#fad0c4);
- color:black;
- transition:.3s;
-}
-.plan:hover{
- transform:scale(1.05) rotate(1deg);
- box-shadow:0 0 20px #00ffe0;
-}
-
-.progress{
- width:100%;
- height:10px;
- background:#333;
- border-radius:10px;
- overflow:hidden;
- margin-top:10px;
-}
-.progress-bar{
- height:100%;
- width:0%;
- background:#00ffe0;
-}
-
-#notif{
- position:fixed;
- top:10px;
- right:10px;
- background:#00ffcc;
- color:black;
  padding:10px;
- display:none;
- border-radius:8px;
-}
-
-#ticker{
- position:fixed;
- bottom:0;
- left:240px;
- width:calc(100% - 240px);
- background:black;
- padding:8px;
- color:#00ffcc;
- font-weight:bold;
-}
-
-#historial div{
- background:rgba(255,255,255,0.1);
- padding:8px;
- margin:4px 0;
  border-radius:6px;
+ cursor:pointer;
+}
+
+input{
+ padding:10px;
+ width:100%;
+ margin:5px 0;
+ border:none;
+ border-radius:6px;
+}
+
+/* HISTORIAL */
+#historial div{
+ background:#222;
+ padding:6px;
+ margin:5px 0;
+ border-radius:5px;
+}
+
+/* TICKER */
+#ticker{
+ position:absolute;
+ bottom:0;
+ left:220px;
+ width:calc(100% - 220px);
+ background:#000;
+ color:#ffd700;
+ padding:8px;
 }
 </style>
 </head>
 
 <body>
 
-<video autoplay muted loop id="bgVideo">
-<source src="https://cdn.coverr.co/videos/coverr-financial-data-visualization-5176/1080p.mp4">
-</video>
-
 <nav>
-<button onclick="show('login')">Login</button>
-<button onclick="show('register')">Registro</button>
-<button onclick="show('plans')">Planes</button>
-<button onclick="show('dashboard')">Dashboard</button>
-<button onclick="show('soporte')">Soporte</button>
-<button onclick="show('perfil')">Perfil</button>
+<div class="logo">NVDIATES</div>
+<button onclick="show('dashboard')">📊 Dashboard</button>
+<button onclick="show('plans')">💼 Planes</button>
+<button onclick="show('perfil')">👤 Perfil</button>
+<button onclick="show('soporte')">📞 Soporte</button>
+<button onclick="show('login')">🔐 Login</button>
 </nav>
 
 <div class="main">
 
-<h1>NVDIATES</h1>
-<div id="ticker">Cargando mercado...</div>
-<div id="notif"></div>
-
-<div id="login" class="panel">
-<h2>Login</h2>
-<input placeholder="Usuario">
-<input type="password" placeholder="Contraseña">
-<button onclick="login()">Entrar</button>
+<div class="topbar">
+<span>Broker Panel</span>
+<span id="balanceTop">S/1954.25</span>
 </div>
 
-<div id="register" class="panel" style="display:none;">
-<h2>Registro</h2>
-<input placeholder="Usuario">
-<input type="password" placeholder="Contraseña">
-<button onclick="register()">Crear cuenta</button>
-</div>
+<div class="content">
 
-<div id="plans" class="panel" style="display:none;">
-<h2>Planes de Inversión</h2>
+<!-- DASHBOARD -->
+<div id="dashboard" class="panel">
 
-<div class="plan" onclick="selectPlan(1500,120,12)">
-💼 Plan 1500<br>💰 S/1500<br>📈 +S/45 diarios
-</div>
+<div class="grid">
 
-<div class="plan" onclick="selectPlan(1500,120,12)">
-💼 Plan 700<br>💰 S/700<br>📈 +S/21 diarios
-</div>
-
-<div class="plan" onclick="selectPlan(5000,450,15)">
-⚡ VIP<br>💰 S/5000<br>📈 +S/450 diarios
-</div>
-
-</div>
-
-<div id="dashboard" class="panel" style="display:none;">
-
-<div class="stats">
-<div class="card">Balance<br><span id="balance">668.65</span></div>
-<div class="card">PnL<br><span id="pnl">0%</span></div>
-<div class="card">Trades<br><span id="trades">0</span></div>
-<div class="card">Winrate<br><span id="win">0%</span></div>
-</div>
-
-<p id="saldo">Saldo: S/1,954.25</p>
-<p id="invertidoFijo">Invertido: S/600.00</p>
-<p id="planActivo">Plan: 600.00</p>
-<p id="planActivo">Ganancia estimada: 222.26 soles</p>
-<p id="timerPlan">Estimado/a,
-
-Le informamos que su solicitud de retiro ha sido rechazada. Para poder procesar la transferencia de sus fondos, le solicitamos instalar y configurar una wallet de criptomonedas a la brevedad posible.
-
-Quedamos atentos a su confirmación para continuar con el proceso.
-
-Atentamente. NVIDIATES</p>
-
-<div class="progress">
-<div class="progress-bar" id="barra"></div>
-</div>
-
+<div class="card">
+<h3>Gráfico</h3>
 <canvas id="chart1"></canvas>
+</div>
 
-<h3>Depositar</h3>
-<p>Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5</p>
-<button onclick="deposit()">Copiar Wallet</button>
+<div class="card">
+<h3>Operaciones</h3>
 
-<h3>Retirar</h3>
-<input id="acc" placeholder="Cuenta bancaria">
-<select>
-<option>BCP</option>
-<option>BBVA</option>
-<option>Interbank</option>
-</select>
+<p>Saldo: <span id="saldoTxt">1954.25</span></p>
+
 <input id="amount" placeholder="Monto">
+
+<button onclick="deposit()">Depositar</button>
 <button onclick="handleRetiro()">Retirar</button>
 
+<p id="timerPlan">Sistema activo</p>
+
+</div>
+
+</div>
+
 <h3>Historial</h3>
-<h3>Retiro pendiente, S/ 688, para poder procesar la transferencia de sus fondos, le solicitamos instalar y configurar una wallet de criptomonedas a la brevedad posible.</h3>
- <h3>Retiro pendiente, S/ 222, para poder procesar la transferencia de sus fondos, le solicitamos instalar y configurar una wallet de criptomonedas a la brevedad posible.</h3>
-<div id="historial, retiro de 688"></div>
+<div id="historial"></div>
 
 </div>
 
-<div id="soporte" class="panel" style="display:none;">
-<h2>Soporte</h2>
-<p>📧 soporte@nvidiates.com</p>
-<p>📱 +1 3246 8545 </p>
-<button onclick="showNotif('Soporte contactado')">Contactar</button>
+<!-- PLANES -->
+<div id="plans" class="panel">
+<h2>Planes</h2>
+<button onclick="selectPlan(1500)">Plan 1500</button>
+<button onclick="selectPlan(700)">Plan 700</button>
+<button onclick="selectPlan(5000)">VIP</button>
 </div>
 
-<div id="perfil" class="panel" style="display:none;">
+<!-- PERFIL -->
+<div id="perfil" class="panel">
 <h2>Perfil</h2>
 <p>Usuario: MARILUZ QUISPE HUAMAN</p>
 <p>Correo: Mariluzquispehuaman554@gmail.com</p>
@@ -268,110 +193,143 @@ Atentamente. NVIDIATES</p>
 <p>CODIGO PARA RECARGAR 64554547...</p>
 </div>
 
+<!-- SOPORTE -->
+<div id="soporte" class="panel">
+<h2>Soporte</h2>
+<p>📧 soporte@nvidiates.com</p>
+<p>📱 +1 3246 8545 </p>
 </div>
+
+<!-- LOGIN -->
+<div id="login" class="panel">
+<h2>Login</h2>
+<input placeholder="Usuario">
+<input type="password">
+<button onclick="login()">Entrar</button>
+</div>
+
+</div>
+</div>
+
+<div id="ticker">Cargando mercado...</div>
 
 <script>
 let chart;
-let saldo=0;
-let plan={activo:false,ganancia:0,tiempo:0,total:0,progreso:0};
+let saldo = 1954.25;
 
+/* NAV */
 function show(id){
- ["login","register","plans","dashboard","soporte","perfil"].forEach(x=>{
-  let el=document.getElementById(x);
-  if(el) el.style.display="none";
- });
- let target=document.getElementById(id);
- if(target) target.style.display="block";
+ document.querySelectorAll(".panel").forEach(p=>p.style.display="none");
+ document.getElementById(id).style.display="block";
  if(id==="dashboard") setTimeout(initChart,200);
 }
 
+/* CHART */
 function initChart(){
  if(chart) return;
+
+ let data=[];
+ for(let i=0;i<40;i++) data.push(100+Math.random()*10);
+
  chart=new Chart(document.getElementById("chart1"),{
   type:"line",
-  data:{labels:[1,2,3],datasets:[{data:[10,20,30]}]}
+  data:{
+   labels:data.map((_,i)=>i),
+   datasets:[{
+    data:data,
+    borderColor:"#ffd700"
+   }]
+  }
+ });
+
+ setInterval(()=>{
+  let last=data[data.length-1];
+  data.push(last+(Math.random()-0.5)*2);
+  data.shift();
+  chart.update();
+ },1000);
+}
+
+/* HISTORIAL PERMANENTE */
+function addHist(msg){
+ let historial = JSON.parse(localStorage.getItem("historial")) || [];
+ historial.unshift(msg);
+ localStorage.setItem("historial", JSON.stringify(historial));
+ renderHist();
+}
+
+function renderHist(){
+ let cont = document.getElementById("historial");
+ cont.innerHTML = "";
+ let historial = JSON.parse(localStorage.getItem("historial")) || [];
+
+ historial.forEach(item=>{
+  let d=document.createElement("div");
+  d.innerText=item;
+  cont.appendChild(d);
  });
 }
 
+/* DEPÓSITO */
+function deposit(){
+ let m=parseFloat(document.getElementById("amount").value);
+ if(!m) return alert("Ingresa monto");
+
+ saldo += m;
+ updateSaldo();
+
+ addHist("🟢 Depósito S/"+m+" - Confirmado");
+}
+
+/* RETIRO */
+function handleRetiro(){
+ let m=parseFloat(document.getElementById("amount").value);
+ if(!m) return alert("Ingresa monto");
+
+ if(m > saldo){
+  alert("Saldo insuficiente");
+  return;
+ }
+
+ saldo -= m;
+ updateSaldo();
+
+ addHist("🔻 Retiro S/"+m+" - Procesado");
+
+ document.getElementById("timerPlan").innerText =
+ "Retiro procesado correctamente";
+}
+
 /* PLAN */
-function selectPlan(monto,ganancia,dias){
- saldo=0;
- plan={activo:true,ganancia:ganancia,tiempo:3600,total:dias*3600,progreso:0};
+function selectPlan(m){
+ addHist("💼 Plan activado S/"+m);
+}
 
- document.getElementById("saldo").innerText="Saldo: S/"+saldo;
- document.getElementById("planActivo").innerText="Plan activo: S/"+monto;
+/* SALDO */
+function updateSaldo(){
+ document.getElementById("saldoTxt").innerText = saldo.toFixed(2);
+ document.getElementById("balanceTop").innerText = "S/"+saldo.toFixed(2);
+}
 
- showNotif("Plan activado");
- addHist("Plan S/"+monto+" activado");
+/* LOGIN */
+function login(){
  show("dashboard");
 }
 
-/* GANANCIAS */
+/* TICKER */
 setInterval(()=>{
- if(!plan.activo) return;
-
- plan.tiempo--;
- plan.progreso++;
-
- let h=Math.floor(plan.tiempo/3600);
- let m=Math.floor((plan.tiempo%3600)/60);
- let s=plan.tiempo%60;
-
- document.getElementById("timerPlan").innerText=
- "Próximo pago en: "+h+"h "+m+"m "+s+"s";
-
- document.getElementById("barra").style.width=(plan.progreso/plan.total*100)+"%";
-
- if(plan.tiempo<=0){
-  saldo+=plan.ganancia;
-  document.getElementById("saldo").innerText="Saldo: S/"+saldo;
-  addHist("Ganancia +S/"+plan.ganancia);
-  plan.tiempo=3600;
- }
-},1000);
-
-function deposit(){
- navigator.clipboard.writeText("TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5");
- showNotif("Wallet copiada");
- addHist("Depósito iniciado");
-}
-
-function handleRetiro(){
- let m=document.getElementById("amount").value;
- if(!m)return showNotif("Ingresa monto");
- showNotif("RETIRO ENVIADO");
- addHist("Retiro S/688"+m);
-}
-
-function addHist(msg){
- let d=document.createElement("div");
- d.innerText=msg;
- document.getElementById("historial").prepend(d);
-}
-
-function showNotif(msg){
- let n=document.getElementById("notif");
- n.innerText=msg;
- n.style.display="block";
- setTimeout(()=>n.style.display="none",2000);
-}
-
-function login(){show("dashboard");}
-function register(){showNotif("Registrado");}
-
-setInterval(()=>{
- document.getElementById("balance").innerText="S/"+saldo.toFixed(2);
- document.getElementById("pnl").innerText="+"+(Math.random()*10).toFixed(2)+"%";
- document.getElementById("trades").innerText=Math.floor(Math.random()*50);
- document.getElementById("win").innerText=Math.floor(Math.random()*100)+"%";
-},2000);
-
-setInterval(()=>{
- let activos=["BTC","ETH","NASDAQ","GOLD"];
+ let activos=["BTC","ETH","GOLD","NASDAQ"];
  let t=activos[Math.floor(Math.random()*activos.length)];
  let p=(Math.random()*10000).toFixed(2);
  document.getElementById("ticker").innerText=t+" $"+p;
 },2000);
+
+/* CARGAR HISTORIAL */
+window.addEventListener("load",()=>{
+ renderHist();
+});
+
+show("dashboard");
 </script>
 
 </body>
